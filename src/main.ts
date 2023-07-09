@@ -68,5 +68,6 @@ function popHandle() {
 }
 
 function sizeHandle() {
-
+    const size = heap.size();
+    informationField.setText(`Size of the heap is ${size}`, COLORS.DARKGREEN);
 }
