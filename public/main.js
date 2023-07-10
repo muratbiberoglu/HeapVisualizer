@@ -1,43 +1,60 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import { FieldElement } from "./FieldElement.js";
-import { Heap } from "./heap.js";
-const KEYS = {
-    PUSH: 'a',
-    TOP: 't',
-    POP: 'p',
-    SIZE: 's',
-};
-const COLORS = {
-    DARKGREEN: "darkgreen",
-    DARKRED: "darkred",
-};
+import { Heap } from "./Heap.js";
+import { InformationFieldColors, KEYS, ALREADY_RUNNING_ERROR } from "./Utils.js";
 const heap = new Heap();
 const arrayField = new FieldElement("array");
 const informationField = new FieldElement("informationField");
-document.onkeydown = (e) => {
+let running = false;
+document.onkeydown = (e) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const KEY = e.key;
+        if (running) {
+            throw Error(ALREADY_RUNNING_ERROR);
+        }
+        const KEY = e.key.toLocaleLowerCase();
         switch (KEY) {
             case KEYS.PUSH:
-                pushHandle();
+                yield handle(push);
                 break;
             case KEYS.TOP:
-                topHandle();
+                yield handle(top);
                 break;
             case KEYS.POP:
-                popHandle();
+                yield handle(pop);
                 break;
             case KEYS.SIZE:
-                sizeHandle();
+                yield handle(size);
                 break;
             default:
                 break;
         }
     }
     catch (e) {
-        informationField.setText(e, COLORS.DARKRED);
+        informationField.setText(e, InformationFieldColors.DARKRED);
     }
-};
-function pushHandle() {
+});
+const handle = (f) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        running = true;
+        console.log(`running setted to ${running}`);
+        yield f();
+    }
+    catch (e) {
+        throw e;
+    }
+    finally {
+        running = false;
+    }
+});
+const push = () => __awaiter(void 0, void 0, void 0, function* () {
     const input = prompt("Enter the number:");
     const isEmpty = input === null || input === "";
     if (isEmpty)
@@ -45,20 +62,20 @@ function pushHandle() {
     const newValue = parseInt(input, 10);
     if (Number.isNaN(newValue))
         throw Error("Not a number!");
-    heap.push(newValue);
+    yield heap.push(newValue);
     arrayField.setText(heap.getArrayString(), "none");
-    informationField.setText(`${newValue} pushed to the heap`, COLORS.DARKGREEN);
-}
-function topHandle() {
+    informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.DARKGREEN);
+});
+const top = () => __awaiter(void 0, void 0, void 0, function* () {
     const topElement = heap.top();
-    informationField.setText(`Top element of the heap is ${topElement}`, COLORS.DARKGREEN);
-}
-function popHandle() {
+    informationField.setText(`Top element of the heap is ${topElement}`, InformationFieldColors.DARKGREEN);
+});
+const pop = () => __awaiter(void 0, void 0, void 0, function* () {
     const poppedElement = heap.pop();
-    informationField.setText(`${poppedElement} popped from the heap`, COLORS.DARKGREEN);
+    informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.DARKGREEN);
     arrayField.setText(heap.getArrayString());
-}
-function sizeHandle() {
+});
+const size = () => __awaiter(void 0, void 0, void 0, function* () {
     const size = heap.size();
-    informationField.setText(`Size of the heap is ${size}`, COLORS.DARKGREEN);
-}
+    informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.DARKGREEN);
+});

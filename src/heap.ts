@@ -1,54 +1,34 @@
-import { SvgElement } from "./SvgElement.js";
-import { SvgTextElement } from "./SvgTextElement.js";
-
-const HEAP_ERRORS = {
-    EMPTY: "HEAP IS EMPTY",
-    FULL: "HEAP IS FULL",
-    RANGE_ERROR: (size: number) => {
-        return `Given indexes are not in range [0, ${size})`;
-    },
-}
+import { HeapElementHandler } from "./HeapElementHandler.js";
+import { HEAP_ERRORS } from "./Utils.js";
 
 export class Heap {
     private static MAX_SIZE = 31;
     private cSize: number;
     private heap: number[];
 
-    private circleRefArray;
-    private textRefArray;
-    private lineToParentRefArray;
+    private heapElementHandler: HeapElementHandler;
 
     constructor() {
         this.cSize = 0;
         this.heap = new Array<number>(Heap.MAX_SIZE);
-
-        // GET REFERENCES
-        this.circleRefArray = Array<SvgElement>(Heap.MAX_SIZE);
-        this.textRefArray = Array<SvgTextElement>(Heap.MAX_SIZE);
-        this.lineToParentRefArray = new Array<SvgElement>(Heap.MAX_SIZE);
-        for (let index = 0; index < Heap.MAX_SIZE; index++) {
-            const circleId = `circle${index}`;
-            this.circleRefArray[index] = new SvgElement(circleId);
-
-            const textId = `text${index}`;
-            this.textRefArray[index] = new SvgTextElement(textId);
-
-            const lineId = `line_${Heap.getParent(index)}_${index}`;
-            this.lineToParentRefArray[index] = new SvgElement(lineId);
-        }
+        this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
     }
 
     size(): number {
         return this.cSize;
     }
 
-    push(newValue: number): void {
+    async push(newValue: number): Promise<void> {
         if (this.cSize === Heap.MAX_SIZE)
             throw Error(HEAP_ERRORS.FULL);
 
         // push number to the end
         this.heap[this.cSize] = newValue;
-        this.textRefArray[this.cSize].setValue(newValue);
+        this.heapElementHandler.setValue(this.cSize, newValue);
+
+        // set visible hidden items
+        this.heapElementHandler.setVisibleById(this.cSize);
+        await this.heapElementHandler.colorizePushed(this.cSize);
 
         // set current index and increment size
         let cIndex = this.cSize;
@@ -59,14 +39,15 @@ export class Heap {
             const pIndex = Heap.getParent(cIndex);
 
             // if parent is greater than or equal then break
-            if (newValue < this.heap[pIndex]) break;
+            await this.heapElementHandler.colorizeCompare(cIndex, pIndex);
+            if (newValue <= this.heap[pIndex]) break;
 
+            await this.heapElementHandler.colorizeSwap(cIndex, pIndex);
             this.swap(cIndex, pIndex);
             cIndex = pIndex;
         }
 
-        // set visible hidden items
-        this.setVisibleById(this.cSize - 1);
+        await this.heapElementHandler.colorizeCertain(cIndex);
     }
 
     top(): number {
@@ -82,7 +63,7 @@ export class Heap {
 
         this.cSize--;
         this.swap(this.cSize, 0);
-        this.setVisibleById(this.cSize, false);
+        this.heapElementHandler.setVisibleById(this.cSize, false);
 
         let cIndex = 0;
         while (true) {
@@ -114,12 +95,6 @@ export class Heap {
         return this.heap.slice(0, this.cSize).join(", ");
     }
 
-    private setVisibleById(id: number, visible: boolean = true) {
-        this.circleRefArray[id].setVisible(visible);
-        this.textRefArray[id].setVisible(visible);
-        this.lineToParentRefArray[id].setVisible(visible);
-    }
-
     private swap(i: number, j: number) {
         const inRange = 0 <= i && i < Heap.MAX_SIZE && 0 <= j && j < Heap.MAX_SIZE;
         if (!inRange)
@@ -130,8 +105,8 @@ export class Heap {
         this.heap[j] = temp;
 
         // swap text elements values also
-        this.textRefArray[i].setValue(this.heap[i]);
-        this.textRefArray[j].setValue(this.heap[j]);
+        this.heapElementHandler.setValue(i, this.heap[i]);
+        this.heapElementHandler.setValue(j, this.heap[j]);
     }
 
     private static getParent(index: number): number {

@@ -55,7 +55,6 @@ body {
 circle {
     stroke: darkblue;
     stroke-width: 0.3;
-    fill: white;
 }
 
 text {
@@ -69,7 +68,3 @@ line {
     stroke: black;
     stroke-width: 1;
 }
-
-/* #svg {
-    width: 100%;
-} */
