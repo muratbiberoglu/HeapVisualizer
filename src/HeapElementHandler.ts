@@ -7,6 +7,9 @@ export class HeapElementHandler {
     private textRefArray;
     private lineToParentRefArray;
     private MAX_SIZE: number;
+
+    private visualizerSpeed: number = VisualizerSpeeds.DEFAULT;
+    private isRunning: boolean = false;
     private sleepTimes: SleepTimesType = VisualizerTimes[VisualizerSpeeds.DEFAULT];
 
     constructor (MAX_SIZE: number, getParent: (_: number) => number) {
@@ -41,8 +44,21 @@ export class HeapElementHandler {
         this.lineToParentRefArray[id].setVisible(visible);
     }
 
-    changeVisualizerSpeed(newSpeed: number) {
-        this.sleepTimes = VisualizerTimes[newSpeed];
+    setVisualizerSpeed(newSpeed: number) {
+        this.visualizerSpeed = newSpeed;
+        this.sleepTimes = VisualizerTimes[this.visualizerSpeed];
+    }
+
+    getVisualizerSpeed(): number {
+        return this.visualizerSpeed;
+    }
+
+    setRunning(running: boolean): void {
+        this.isRunning = running;
+    }
+
+    getRunning(): boolean {
+        return this.isRunning;
     }
 
     async visualizePushed(index: number) {

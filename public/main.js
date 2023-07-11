@@ -11,5 +11,5 @@ import { Handler } from "./Handler.js";
 const functionHandler = new Handler();
 document.onkeydown = (e) => __awaiter(void 0, void 0, void 0, function* () {
     const key = e.key.toLocaleLowerCase();
-    yield functionHandler.handle(key);
+    yield functionHandler.handleKeyDown(key);
 });

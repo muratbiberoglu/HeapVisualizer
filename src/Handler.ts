@@ -1,36 +1,40 @@
 import { FieldElement } from "./FieldElement.js";
 import { Heap } from "./Heap.js";
+import { HeapElementHandler } from "./HeapElementHandler.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
 
 export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 
 export class Handler {
     private heap: Heap;
-    private arrayField;
-    private informationField;
-    private speedField;
-    private visualizerSpeed = VisualizerSpeeds.DEFAULT;
+    private heapElementHandler: HeapElementHandler;
+
+    private arrayField: FieldElement;
+    private speedField: FieldElement;
+    private informationField: FieldElement;
 
     private functions = new Map<string, handlerFunctionSignature>;
-    private running = false;
 
     constructor() {
         this.heap = new Heap();
+        this.heapElementHandler = this.heap.getHeapElementHandler();
+
         this.arrayField = new FieldElement("array");
-        this.informationField = new FieldElement("informationField");
         this.speedField = new FieldElement("speedField");
+        this.informationField = new FieldElement("informationField");
 
         this.setupFunctionsAndKeys();
     }
 
-    async handle(KEY: string) {
+    async handleKeyDown(KEY: string) {
         const f = this.functions.get(KEY);
 
         const keyIsValid = f !== undefined;
         if (!keyIsValid) return;
 
         try {
-            if (this.running) {
+            const running = this.heapElementHandler.getRunning();
+            if (running) {
                 throw Error(ALREADY_RUNNING_ERROR);
             }
             await this.run(f);
@@ -41,16 +45,16 @@ export class Handler {
 
     private async run(f: handlerFunctionSignature) {
         try {
-            this.running = true;
+            this.heapElementHandler.setRunning(true);
             await f();
         } catch (e) {
             throw e;
         } finally {
-            this.running = false;
+            this.heapElementHandler.setRunning(false);
         }
     }
 
-    private async push() {
+    private async push(): Promise<void> {
         const input = prompt("Enter the number:");
 
         const isEmpty = input === null || input === "";
@@ -82,15 +86,16 @@ export class Handler {
     }
 
     private changeVisualizerSpeed(faster: boolean = true): void {
-        if (faster && this.visualizerSpeed === VisualizerSpeeds.FAST)
+        const currentSpeed = this.heapElementHandler.getVisualizerSpeed();
+        if (faster && currentSpeed === VisualizerSpeeds.FAST)
             return;
-        if (!faster && this.visualizerSpeed === VisualizerSpeeds.SLOW)
+        if (!faster && currentSpeed === VisualizerSpeeds.SLOW)
             return;
 
-        this.visualizerSpeed = faster ? this.visualizerSpeed - 1 : this.visualizerSpeed + 1;
-        this.heap.changeVisualizerSpeed(this.visualizerSpeed)
+        const newSpeed = faster ? currentSpeed - 1 : currentSpeed + 1;
+        this.heapElementHandler.setVisualizerSpeed(newSpeed);
 
-        const newSpeedName = VisualizerTimes[this.visualizerSpeed].NAME;
+        const newSpeedName = VisualizerTimes[newSpeed].NAME;
         this.speedField.setText(newSpeedName);
     }
 

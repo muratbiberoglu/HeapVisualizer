@@ -12,23 +12,23 @@ import { Heap } from "./Heap.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
 export class Handler {
     constructor() {
-        this.visualizerSpeed = VisualizerSpeeds.DEFAULT;
         this.functions = new Map;
-        this.running = false;
         this.heap = new Heap();
+        this.heapElementHandler = this.heap.getHeapElementHandler();
         this.arrayField = new FieldElement("array");
-        this.informationField = new FieldElement("informationField");
         this.speedField = new FieldElement("speedField");
+        this.informationField = new FieldElement("informationField");
         this.setupFunctionsAndKeys();
     }
-    handle(KEY) {
+    handleKeyDown(KEY) {
         return __awaiter(this, void 0, void 0, function* () {
             const f = this.functions.get(KEY);
             const keyIsValid = f !== undefined;
             if (!keyIsValid)
                 return;
             try {
-                if (this.running) {
+                const running = this.heapElementHandler.getRunning();
+                if (running) {
                     throw Error(ALREADY_RUNNING_ERROR);
                 }
                 yield this.run(f);
@@ -41,14 +41,14 @@ export class Handler {
     run(f) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                this.running = true;
+                this.heapElementHandler.setRunning(true);
                 yield f();
             }
             catch (e) {
                 throw e;
             }
             finally {
-                this.running = false;
+                this.heapElementHandler.setRunning(false);
             }
         });
     }
@@ -86,13 +86,14 @@ export class Handler {
         });
     }
     changeVisualizerSpeed(faster = true) {
-        if (faster && this.visualizerSpeed === VisualizerSpeeds.FAST)
+        const currentSpeed = this.heapElementHandler.getVisualizerSpeed();
+        if (faster && currentSpeed === VisualizerSpeeds.FAST)
             return;
-        if (!faster && this.visualizerSpeed === VisualizerSpeeds.SLOW)
+        if (!faster && currentSpeed === VisualizerSpeeds.SLOW)
             return;
-        this.visualizerSpeed = faster ? this.visualizerSpeed - 1 : this.visualizerSpeed + 1;
-        this.heap.changeVisualizerSpeed(this.visualizerSpeed);
-        const newSpeedName = VisualizerTimes[this.visualizerSpeed].NAME;
+        const newSpeed = faster ? currentSpeed - 1 : currentSpeed + 1;
+        this.heapElementHandler.setVisualizerSpeed(newSpeed);
+        const newSpeedName = VisualizerTimes[newSpeed].NAME;
         this.speedField.setText(newSpeedName);
     }
     setupFunctionsAndKeys() {

@@ -8,19 +8,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { HeapElementHandler } from "./HeapElementHandler.js";
-import { HEAP_ERRORS, VisualizerSpeeds } from "./Utils.js";
+import { HEAP_ERRORS } from "./Utils.js";
 export class Heap {
     constructor() {
         this.cSize = 0;
         this.heap = new Array(Heap.MAX_SIZE);
         this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
-        this.changeVisualizerSpeed(VisualizerSpeeds.DEFAULT);
     }
     size() {
         return this.cSize;
     }
-    changeVisualizerSpeed(newSpeed) {
-        this.heapElementHandler.changeVisualizerSpeed(newSpeed);
+    getHeapElementHandler() {
+        return this.heapElementHandler;
     }
     push(newValue) {
         return __awaiter(this, void 0, void 0, function* () {

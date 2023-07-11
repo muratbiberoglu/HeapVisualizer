@@ -1,5 +1,5 @@
 import { HeapElementHandler } from "./HeapElementHandler.js";
-import { HEAP_ERRORS, VisualizerSpeeds } from "./Utils.js";
+import { HEAP_ERRORS } from "./Utils.js";
 
 export class Heap {
     private static MAX_SIZE = 31;
@@ -12,15 +12,14 @@ export class Heap {
         this.cSize = 0;
         this.heap = new Array<number>(Heap.MAX_SIZE);
         this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
-        this.changeVisualizerSpeed(VisualizerSpeeds.DEFAULT);
     }
 
     size(): number {
         return this.cSize;
     }
 
-    changeVisualizerSpeed(newSpeed: number) {
-        this.heapElementHandler.changeVisualizerSpeed(newSpeed);
+    getHeapElementHandler(): HeapElementHandler {
+        return this.heapElementHandler;
     }
 
     async push(newValue: number): Promise<void> {

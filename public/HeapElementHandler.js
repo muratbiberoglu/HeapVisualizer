@@ -12,6 +12,8 @@ import { SvgElement } from "./SvgElement.js";
 import { SvgTextElement } from "./SvgTextElement.js";
 export class HeapElementHandler {
     constructor(MAX_SIZE, getParent) {
+        this.visualizerSpeed = VisualizerSpeeds.DEFAULT;
+        this.isRunning = false;
         this.sleepTimes = VisualizerTimes[VisualizerSpeeds.DEFAULT];
         this.MAX_SIZE = MAX_SIZE;
         // GET REFERENCES
@@ -38,8 +40,18 @@ export class HeapElementHandler {
         this.textRefArray[id].setVisible(visible);
         this.lineToParentRefArray[id].setVisible(visible);
     }
-    changeVisualizerSpeed(newSpeed) {
-        this.sleepTimes = VisualizerTimes[newSpeed];
+    setVisualizerSpeed(newSpeed) {
+        this.visualizerSpeed = newSpeed;
+        this.sleepTimes = VisualizerTimes[this.visualizerSpeed];
+    }
+    getVisualizerSpeed() {
+        return this.visualizerSpeed;
+    }
+    setRunning(running) {
+        this.isRunning = running;
+    }
+    getRunning() {
+        return this.isRunning;
     }
     visualizePushed(index) {
         return __awaiter(this, void 0, void 0, function* () {
