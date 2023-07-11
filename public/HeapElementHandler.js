@@ -8,8 +8,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { HEAP_ERRORS, HeapColors, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
-import { SvgElement } from "./SvgElement.js";
-import { SvgTextElement } from "./SvgTextElement.js";
+import { SvgElement } from "./CustomElements/SvgElement.js";
+import { SvgTextElement } from "./CustomElements/SvgTextElement.js";
 export class HeapElementHandler {
     constructor(MAX_SIZE, getParent) {
         this.visualizerSpeed = VisualizerSpeeds.DEFAULT;

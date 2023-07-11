@@ -1,6 +1,6 @@
 import { HEAP_ERRORS, HeapColors, SleepTimesType, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
-import { SvgElement } from "./SvgElement.js";
-import { SvgTextElement } from "./SvgTextElement.js";
+import { SvgElement } from "./CustomElements/SvgElement.js";
+import { SvgTextElement } from "./CustomElements/SvgTextElement.js";
 
 export class HeapElementHandler {
     private circleRefArray;

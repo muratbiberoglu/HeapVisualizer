@@ -7,10 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { FieldElement } from "./FieldElement.js";
+import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
-export class Handler {
+export class MainHandler {
     constructor() {
         this.functions = new Map;
         this.heap = new Heap();

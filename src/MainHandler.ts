@@ -1,11 +1,11 @@
-import { FieldElement } from "./FieldElement.js";
+import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
 import { HeapElementHandler } from "./HeapElementHandler.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
 
 export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 
-export class Handler {
+export class MainHandler {
     private heap: Heap;
     private heapElementHandler: HeapElementHandler;
 

@@ -7,8 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { Handler } from "./Handler.js";
-const functionHandler = new Handler();
+import { MainHandler } from "./MainHandler.js";
+const functionHandler = new MainHandler();
 document.onkeydown = (e) => __awaiter(void 0, void 0, void 0, function* () {
     const key = e.key.toLocaleLowerCase();
     yield functionHandler.handleKeyDown(key);
