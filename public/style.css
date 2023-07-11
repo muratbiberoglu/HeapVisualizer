@@ -68,3 +68,8 @@ line {
     stroke: black;
     stroke-width: 1;
 }
+
+path {
+    stroke: white;
+    fill: white;
+}
