@@ -5,7 +5,7 @@ export const HeapColors = {
         "parent": "green",
     },
     SWAP: "yellow",
-    CERTAIN: "#c22dfc",
+    CERTAIN: "cyan",
 };
 export const InformationFieldColors = {
     DARKGREEN: "darkgreen",
@@ -19,10 +19,4 @@ export const HEAP_ERRORS = {
     },
 };
 export const ALREADY_RUNNING_ERROR = "Already a visualization is running. Can not started.";
-export const KEYS = {
-    PUSH: 'a',
-    TOP: 't',
-    POP: 'p',
-    SIZE: 's',
-};
 export const sleep = (ms) => new Promise(r => setTimeout(r, ms));
