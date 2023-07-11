@@ -1,5 +1,5 @@
 import { HeapElementHandler } from "./HeapElementHandler.js";
-import { HEAP_ERRORS } from "./Utils.js";
+import { HEAP_ERRORS, VisualizerSpeeds } from "./Utils.js";
 
 export class Heap {
     private static MAX_SIZE = 31;
@@ -12,10 +12,15 @@ export class Heap {
         this.cSize = 0;
         this.heap = new Array<number>(Heap.MAX_SIZE);
         this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
+        this.changeVisualizerSpeed(VisualizerSpeeds.DEFAULT);
     }
 
     size(): number {
         return this.cSize;
+    }
+
+    changeVisualizerSpeed(newSpeed: number) {
+        this.heapElementHandler.changeVisualizerSpeed(newSpeed);
     }
 
     async push(newValue: number): Promise<void> {
@@ -28,7 +33,7 @@ export class Heap {
 
         // set visible hidden items
         this.heapElementHandler.setVisibleById(this.cSize);
-        await this.heapElementHandler.colorizePushed(this.cSize);
+        await this.heapElementHandler.visualizePushed(this.cSize);
 
         // set current index and increment size
         let cIndex = this.cSize;
@@ -39,15 +44,15 @@ export class Heap {
             const pIndex = Heap.getParent(cIndex);
 
             // if parent is greater than or equal then break
-            await this.heapElementHandler.colorizeCompare(cIndex, pIndex);
+            await this.heapElementHandler.visualizeCompare(cIndex, pIndex);
             if (newValue <= this.heap[pIndex]) break;
 
-            await this.heapElementHandler.colorizeSwap(cIndex, pIndex);
+            await this.heapElementHandler.visualizeSwap(cIndex, pIndex);
             this.swap(cIndex, pIndex);
             cIndex = pIndex;
         }
 
-        await this.heapElementHandler.colorizeCertain(cIndex);
+        await this.heapElementHandler.visualizeCertain(cIndex);
     }
 
     top(): number {

@@ -7,11 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { HEAP_ERRORS, HeapColors, sleep } from "./Utils.js";
+import { HEAP_ERRORS, HeapColors, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
 import { SvgElement } from "./SvgElement.js";
 import { SvgTextElement } from "./SvgTextElement.js";
 export class HeapElementHandler {
     constructor(MAX_SIZE, getParent) {
+        this.sleepTimes = VisualizerTimes[VisualizerSpeeds.DEFAULT];
         this.MAX_SIZE = MAX_SIZE;
         // GET REFERENCES
         this.circleRefArray = Array(this.MAX_SIZE);
@@ -37,36 +38,46 @@ export class HeapElementHandler {
         this.textRefArray[id].setVisible(visible);
         this.lineToParentRefArray[id].setVisible(visible);
     }
-    colorizePushed(index) {
+    changeVisualizerSpeed(newSpeed) {
+        this.sleepTimes = VisualizerTimes[newSpeed];
+    }
+    visualizePushed(index) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.circleRefArray[index].setBackgroundColor(HeapColors.NEW_PUSHED_ITEM);
-            yield sleep(400);
-            this.circleRefArray[index].setBackgroundColor();
+            const sleepTime = this.sleepTimes.PUSH;
+            this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
+            yield sleep(sleepTime);
+            this.visualize(index);
         });
     }
-    colorizeCertain(index) {
+    visualizeCertain(index) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.circleRefArray[index].setBackgroundColor(HeapColors.CERTAIN);
-            yield sleep(400);
-            this.circleRefArray[index].setBackgroundColor();
+            const sleepTime = this.sleepTimes.CERTAIN;
+            this.visualize(index, HeapColors.CERTAIN);
+            yield sleep(sleepTime);
+            this.visualize(index);
         });
     }
-    colorizeCompare(cIndex, pIndex) {
+    visualizeCompare(cIndex, pIndex) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.circleRefArray[cIndex].setBackgroundColor(HeapColors.COMPARE_ITEMS.child);
-            this.circleRefArray[pIndex].setBackgroundColor(HeapColors.COMPARE_ITEMS.parent);
-            yield sleep(400);
-            this.circleRefArray[cIndex].setBackgroundColor();
-            this.circleRefArray[pIndex].setBackgroundColor();
+            const sleepTime = this.sleepTimes.COMPARE;
+            this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
+            this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
+            yield sleep(sleepTime);
+            this.visualize(cIndex);
+            this.visualize(pIndex);
         });
     }
-    colorizeSwap(cIndex, pIndex) {
+    visualizeSwap(cIndex, pIndex) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.circleRefArray[cIndex].setBackgroundColor(HeapColors.SWAP);
-            this.circleRefArray[pIndex].setBackgroundColor(HeapColors.SWAP);
-            yield sleep(400);
-            this.circleRefArray[cIndex].setBackgroundColor();
-            this.circleRefArray[pIndex].setBackgroundColor();
+            const sleepTime = this.sleepTimes.SWAP;
+            this.visualize(cIndex, HeapColors.SWAP);
+            this.visualize(pIndex, HeapColors.SWAP);
+            yield sleep(sleepTime);
+            this.visualize(cIndex);
+            this.visualize(pIndex);
         });
+    }
+    visualize(index, bgColor = "") {
+        this.circleRefArray[index].setBackgroundColor(bgColor);
     }
 }

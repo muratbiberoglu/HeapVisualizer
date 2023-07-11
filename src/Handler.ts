@@ -1,22 +1,24 @@
 import { FieldElement } from "./FieldElement.js";
 import { Heap } from "./Heap.js";
-import { ALREADY_RUNNING_ERROR, InformationFieldColors } from "./Utils.js";
+import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
 
-export type handlerFunctionSignature = () => Promise<void>;
+export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 
 export class Handler {
     private heap: Heap;
     private arrayField;
     private informationField;
+    private speedField;
+    private visualizerSpeed = VisualizerSpeeds.DEFAULT;
 
     private functions = new Map<string, handlerFunctionSignature>;
     private running = false;
 
     constructor() {
         this.heap = new Heap();
-        console.log(this.heap);
         this.arrayField = new FieldElement("array");
         this.informationField = new FieldElement("informationField");
+        this.speedField = new FieldElement("speedField");
 
         this.setupFunctionsAndKeys();
     }
@@ -25,8 +27,8 @@ export class Handler {
         const f = this.functions.get(KEY);
 
         const keyIsValid = f !== undefined;
-        if(!keyIsValid) return;
-    
+        if (!keyIsValid) return;
+
         try {
             if (this.running) {
                 throw Error(ALREADY_RUNNING_ERROR);
@@ -58,7 +60,6 @@ export class Handler {
 
         if (Number.isNaN(newValue)) throw Error("Not a number!");
 
-        console.log(this.arrayField);
         await this.heap.push(newValue);
         this.arrayField.setText(this.heap.getArrayString(), "none");
         this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.DARKGREEN);
@@ -80,10 +81,25 @@ export class Handler {
         this.informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.DARKGREEN);
     }
 
+    private changeVisualizerSpeed(faster: boolean = true): void {
+        if (faster && this.visualizerSpeed === VisualizerSpeeds.FAST)
+            return;
+        if (!faster && this.visualizerSpeed === VisualizerSpeeds.SLOW)
+            return;
+
+        this.visualizerSpeed = faster ? this.visualizerSpeed - 1 : this.visualizerSpeed + 1;
+        this.heap.changeVisualizerSpeed(this.visualizerSpeed)
+
+        const newSpeedName = VisualizerTimes[this.visualizerSpeed].NAME;
+        this.speedField.setText(newSpeedName);
+    }
+
     private setupFunctionsAndKeys() {
         this.functions.set('a', async () => await this.push());
         this.functions.set('s', async () => await this.size());
         this.functions.set('t', async () => await this.top());
         this.functions.set('p', async () => await this.pop());
+        this.functions.set('arrowup', () => this.changeVisualizerSpeed());
+        this.functions.set('arrowdown', () => this.changeVisualizerSpeed(false));
     }
 }

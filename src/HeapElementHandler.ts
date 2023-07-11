@@ -1,4 +1,4 @@
-import { HEAP_ERRORS, HeapColors, sleep } from "./Utils.js";
+import { HEAP_ERRORS, HeapColors, SleepTimesType, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
 import { SvgElement } from "./SvgElement.js";
 import { SvgTextElement } from "./SvgTextElement.js";
 
@@ -7,6 +7,7 @@ export class HeapElementHandler {
     private textRefArray;
     private lineToParentRefArray;
     private MAX_SIZE: number;
+    private sleepTimes: SleepTimesType = VisualizerTimes[VisualizerSpeeds.DEFAULT];
 
     constructor (MAX_SIZE: number, getParent: (_: number) => number) {
         this.MAX_SIZE = MAX_SIZE;
@@ -40,31 +41,43 @@ export class HeapElementHandler {
         this.lineToParentRefArray[id].setVisible(visible);
     }
 
-    async colorizePushed(index: number) {
-        this.circleRefArray[index].setBackgroundColor(HeapColors.NEW_PUSHED_ITEM);
-        await sleep(400);
-        this.circleRefArray[index].setBackgroundColor();
+    changeVisualizerSpeed(newSpeed: number) {
+        this.sleepTimes = VisualizerTimes[newSpeed];
     }
 
-    async colorizeCertain(index: number) {
-        this.circleRefArray[index].setBackgroundColor(HeapColors.CERTAIN);
-        await sleep(400);
-        this.circleRefArray[index].setBackgroundColor();
+    async visualizePushed(index: number) {
+        const sleepTime = this.sleepTimes.PUSH;
+        this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
+        await sleep(sleepTime);
+        this.visualize(index);
     }
 
-    async colorizeCompare(cIndex: number, pIndex: number) {
-        this.circleRefArray[cIndex].setBackgroundColor(HeapColors.COMPARE_ITEMS.child);
-        this.circleRefArray[pIndex].setBackgroundColor(HeapColors.COMPARE_ITEMS.parent);
-        await sleep(400);
-        this.circleRefArray[cIndex].setBackgroundColor();
-        this.circleRefArray[pIndex].setBackgroundColor();
+    async visualizeCertain(index: number) {
+        const sleepTime = this.sleepTimes.CERTAIN;
+        this.visualize(index, HeapColors.CERTAIN);
+        await sleep(sleepTime);
+        this.visualize(index);
     }
 
-    async colorizeSwap(cIndex: number, pIndex: number) {
-        this.circleRefArray[cIndex].setBackgroundColor(HeapColors.SWAP);
-        this.circleRefArray[pIndex].setBackgroundColor(HeapColors.SWAP);
-        await sleep(400);
-        this.circleRefArray[cIndex].setBackgroundColor();
-        this.circleRefArray[pIndex].setBackgroundColor();
+    async visualizeCompare(cIndex: number, pIndex: number) {
+        const sleepTime = this.sleepTimes.COMPARE;
+        this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
+        this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
+        await sleep(sleepTime);
+        this.visualize(cIndex);
+        this.visualize(pIndex);
+    }
+
+    async visualizeSwap(cIndex: number, pIndex: number) {
+        const sleepTime = this.sleepTimes.SWAP;
+        this.visualize(cIndex, HeapColors.SWAP);
+        this.visualize(pIndex, HeapColors.SWAP);
+        await sleep(sleepTime);
+        this.visualize(cIndex);
+        this.visualize(pIndex);
+    }
+
+    private visualize(index: number, bgColor: string = "") {
+        this.circleRefArray[index].setBackgroundColor(bgColor);
     }
 }

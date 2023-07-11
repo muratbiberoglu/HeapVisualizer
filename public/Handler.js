@@ -9,15 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { FieldElement } from "./FieldElement.js";
 import { Heap } from "./Heap.js";
-import { ALREADY_RUNNING_ERROR, InformationFieldColors } from "./Utils.js";
+import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
 export class Handler {
     constructor() {
+        this.visualizerSpeed = VisualizerSpeeds.DEFAULT;
         this.functions = new Map;
         this.running = false;
         this.heap = new Heap();
-        console.log(this.heap);
         this.arrayField = new FieldElement("array");
         this.informationField = new FieldElement("informationField");
+        this.speedField = new FieldElement("speedField");
         this.setupFunctionsAndKeys();
     }
     handle(KEY) {
@@ -60,7 +61,6 @@ export class Handler {
             const newValue = parseInt(input, 10);
             if (Number.isNaN(newValue))
                 throw Error("Not a number!");
-            console.log(this.arrayField);
             yield this.heap.push(newValue);
             this.arrayField.setText(this.heap.getArrayString(), "none");
             this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.DARKGREEN);
@@ -85,10 +85,22 @@ export class Handler {
             this.informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.DARKGREEN);
         });
     }
+    changeVisualizerSpeed(faster = true) {
+        if (faster && this.visualizerSpeed === VisualizerSpeeds.FAST)
+            return;
+        if (!faster && this.visualizerSpeed === VisualizerSpeeds.SLOW)
+            return;
+        this.visualizerSpeed = faster ? this.visualizerSpeed - 1 : this.visualizerSpeed + 1;
+        this.heap.changeVisualizerSpeed(this.visualizerSpeed);
+        const newSpeedName = VisualizerTimes[this.visualizerSpeed].NAME;
+        this.speedField.setText(newSpeedName);
+    }
     setupFunctionsAndKeys() {
         this.functions.set('a', () => __awaiter(this, void 0, void 0, function* () { return yield this.push(); }));
         this.functions.set('s', () => __awaiter(this, void 0, void 0, function* () { return yield this.size(); }));
         this.functions.set('t', () => __awaiter(this, void 0, void 0, function* () { return yield this.top(); }));
         this.functions.set('p', () => __awaiter(this, void 0, void 0, function* () { return yield this.pop(); }));
+        this.functions.set('arrowup', () => this.changeVisualizerSpeed());
+        this.functions.set('arrowdown', () => this.changeVisualizerSpeed(false));
     }
 }

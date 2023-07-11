@@ -8,15 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { HeapElementHandler } from "./HeapElementHandler.js";
-import { HEAP_ERRORS } from "./Utils.js";
+import { HEAP_ERRORS, VisualizerSpeeds } from "./Utils.js";
 export class Heap {
     constructor() {
         this.cSize = 0;
         this.heap = new Array(Heap.MAX_SIZE);
         this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
+        this.changeVisualizerSpeed(VisualizerSpeeds.DEFAULT);
     }
     size() {
         return this.cSize;
+    }
+    changeVisualizerSpeed(newSpeed) {
+        this.heapElementHandler.changeVisualizerSpeed(newSpeed);
     }
     push(newValue) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -27,7 +31,7 @@ export class Heap {
             this.heapElementHandler.setValue(this.cSize, newValue);
             // set visible hidden items
             this.heapElementHandler.setVisibleById(this.cSize);
-            yield this.heapElementHandler.colorizePushed(this.cSize);
+            yield this.heapElementHandler.visualizePushed(this.cSize);
             // set current index and increment size
             let cIndex = this.cSize;
             this.cSize++;
@@ -35,14 +39,14 @@ export class Heap {
                 // calculate parent index
                 const pIndex = Heap.getParent(cIndex);
                 // if parent is greater than or equal then break
-                yield this.heapElementHandler.colorizeCompare(cIndex, pIndex);
+                yield this.heapElementHandler.visualizeCompare(cIndex, pIndex);
                 if (newValue <= this.heap[pIndex])
                     break;
-                yield this.heapElementHandler.colorizeSwap(cIndex, pIndex);
+                yield this.heapElementHandler.visualizeSwap(cIndex, pIndex);
                 this.swap(cIndex, pIndex);
                 cIndex = pIndex;
             }
-            yield this.heapElementHandler.colorizeCertain(cIndex);
+            yield this.heapElementHandler.visualizeCertain(cIndex);
         });
     }
     top() {
