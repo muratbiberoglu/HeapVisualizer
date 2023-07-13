@@ -7,13 +7,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { HeapElementHandler } from "./HeapElementHandler.js";
+import { HeapHandler } from "./HeapHandler";
 import { HEAP_ERRORS } from "./Utils.js";
 export class Heap {
     constructor() {
         this.cSize = 0;
         this.heap = new Array(Heap.MAX_SIZE);
-        this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
+        this.heapElementHandler = new HeapHandler(Heap.MAX_SIZE, Heap.getParent);
     }
     size() {
         return this.cSize;

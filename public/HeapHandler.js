@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { HEAP_ERRORS, HeapColors, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
 import { SvgElement } from "./CustomElements/SvgElement.js";
 import { SvgTextElement } from "./CustomElements/SvgTextElement.js";
-export class HeapElementHandler {
+export class HeapHandler {
     constructor(MAX_SIZE, getParent) {
         this.visualizerSpeed = VisualizerSpeeds.DEFAULT;
         this.isRunning = false;

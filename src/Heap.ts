@@ -1,4 +1,4 @@
-import { HeapElementHandler } from "./HeapElementHandler.js";
+import { HeapHandler } from "./HeapHandler";
 import { HEAP_ERRORS } from "./Utils.js";
 
 export class Heap {
@@ -6,19 +6,19 @@ export class Heap {
     private cSize: number;
     private heap: number[];
 
-    private heapElementHandler: HeapElementHandler;
+    private heapElementHandler: HeapHandler;
 
     constructor() {
         this.cSize = 0;
         this.heap = new Array<number>(Heap.MAX_SIZE);
-        this.heapElementHandler = new HeapElementHandler(Heap.MAX_SIZE, Heap.getParent);
+        this.heapElementHandler = new HeapHandler(Heap.MAX_SIZE, Heap.getParent);
     }
 
     size(): number {
         return this.cSize;
     }
 
-    getHeapElementHandler(): HeapElementHandler {
+    getHeapElementHandler(): HeapHandler {
         return this.heapElementHandler;
     }
 

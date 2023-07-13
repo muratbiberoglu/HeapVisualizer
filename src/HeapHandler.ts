@@ -2,7 +2,7 @@ import { HEAP_ERRORS, HeapColors, SleepTimesType, VisualizerSpeeds, VisualizerTi
 import { SvgElement } from "./CustomElements/SvgElement.js";
 import { SvgTextElement } from "./CustomElements/SvgTextElement.js";
 
-export class HeapElementHandler {
+export class HeapHandler {
     private circleRefArray;
     private textRefArray;
     private lineToParentRefArray;
