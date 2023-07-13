@@ -1,29 +1,33 @@
 import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
-import { HeapHandler } from "./HeapHandler";
+import { HeapHandler } from "./HeapHandler.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
 
 export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 
 export class MainHandler {
     private heap: Heap;
-    private heapElementHandler: HeapHandler;
+    private heapHandler: HeapHandler;
 
     private arrayField: FieldElement;
     private speedField: FieldElement;
+    private debugField: FieldElement;
     private informationField: FieldElement;
 
     private functions = new Map<string, handlerFunctionSignature>;
 
     constructor() {
         this.heap = new Heap();
-        this.heapElementHandler = this.heap.getHeapElementHandler();
+        this.heapHandler = this.heap.getHeapElementHandler();
 
         this.arrayField = new FieldElement("array");
         this.speedField = new FieldElement("speedField");
+        this.debugField = new FieldElement("debugField");
         this.informationField = new FieldElement("informationField");
 
         this.setupFunctionsAndKeys();
+
+        this.debugField.setColor("red");
     }
 
     async handleKeyDown(KEY: string) {
@@ -33,8 +37,9 @@ export class MainHandler {
         if (!keyIsValid) return;
 
         try {
-            const running = this.heapElementHandler.getRunning();
-            if (running) {
+            const running = this.heapHandler.getRunning();
+            const keyIsEnter = KEY === 'enter';     // check for not throwing error in debug mode
+            if (running && !keyIsEnter) {
                 throw Error(ALREADY_RUNNING_ERROR);
             }
             await this.run(f);
@@ -45,12 +50,12 @@ export class MainHandler {
 
     private async run(f: handlerFunctionSignature) {
         try {
-            this.heapElementHandler.setRunning(true);
+            this.heapHandler.setRunning(true);
             await f();
         } catch (e) {
             throw e;
         } finally {
-            this.heapElementHandler.setRunning(false);
+            this.heapHandler.setRunning(false);
         }
     }
 
@@ -86,17 +91,26 @@ export class MainHandler {
     }
 
     private changeVisualizerSpeed(faster: boolean = true): void {
-        const currentSpeed = this.heapElementHandler.getVisualizerSpeed();
+        const currentSpeed = this.heapHandler.getVisualizerSpeed();
         if (faster && currentSpeed === VisualizerSpeeds.FAST)
             return;
         if (!faster && currentSpeed === VisualizerSpeeds.SLOW)
             return;
 
         const newSpeed = faster ? currentSpeed - 1 : currentSpeed + 1;
-        this.heapElementHandler.setVisualizerSpeed(newSpeed);
+        this.heapHandler.setVisualizerSpeed(newSpeed);
 
         const newSpeedName = VisualizerTimes[newSpeed].NAME;
         this.speedField.setText(newSpeedName);
+    }
+
+    private toggleDebugMode() {
+        this.heapHandler.toggleIsInDebugMode();
+        const isOn = this.heapHandler.getIsInDebugMode();
+        const text = isOn ? "ON" : "OFF";
+        const color = isOn ? "green" : "red";
+        this.debugField.setText(text);
+        this.debugField.setColor(color);
     }
 
     private setupFunctionsAndKeys() {
@@ -106,5 +120,7 @@ export class MainHandler {
         this.functions.set('p', async () => await this.pop());
         this.functions.set('arrowup', () => this.changeVisualizerSpeed());
         this.functions.set('arrowdown', () => this.changeVisualizerSpeed(false));
+        this.functions.set('d', () => this.toggleDebugMode());
+        this.functions.set('enter', () => this.heapHandler.setIsDebuggerWaiting(false));
     }
 }

@@ -10,6 +10,8 @@ export class HeapHandler {
 
     private visualizerSpeed: number = VisualizerSpeeds.DEFAULT;
     private isRunning: boolean = false;
+    private isDebuggerWaiting: boolean = false;
+    private isInDebugMode: boolean = false;
     private sleepTimes: SleepTimesType = VisualizerTimes[VisualizerSpeeds.DEFAULT];
 
     constructor (MAX_SIZE: number, getParent: (_: number) => number) {
@@ -29,6 +31,18 @@ export class HeapHandler {
             const lineId = `line_${getParent(index)}_${index}`;
             this.lineToParentRefArray[index] = new SvgElement(lineId);
         }
+    }
+
+    setIsDebuggerWaiting(isDebuggerWaiting: boolean) {
+        this.isDebuggerWaiting = isDebuggerWaiting;
+    }
+
+    toggleIsInDebugMode() {
+        this.isInDebugMode = !this.isInDebugMode;
+    }
+
+    getIsInDebugMode() {
+        return this.isInDebugMode;
     }
 
     setValue(index: number, value: number): void {
@@ -64,14 +78,14 @@ export class HeapHandler {
     async visualizePushed(index: number) {
         const sleepTime = this.sleepTimes.PUSH;
         this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
-        await sleep(sleepTime);
+        await this.sleepOrDebug(sleepTime);
         this.visualize(index);
     }
 
     async visualizeCertain(index: number) {
         const sleepTime = this.sleepTimes.CERTAIN;
         this.visualize(index, HeapColors.CERTAIN);
-        await sleep(sleepTime);
+        await this.sleepOrDebug(sleepTime);
         this.visualize(index);
     }
 
@@ -79,7 +93,7 @@ export class HeapHandler {
         const sleepTime = this.sleepTimes.COMPARE;
         this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
         this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
-        await sleep(sleepTime);
+        await this.sleepOrDebug(sleepTime);
         this.visualize(cIndex);
         this.visualize(pIndex);
     }
@@ -88,12 +102,26 @@ export class HeapHandler {
         const sleepTime = this.sleepTimes.SWAP;
         this.visualize(cIndex, HeapColors.SWAP);
         this.visualize(pIndex, HeapColors.SWAP);
-        await sleep(sleepTime);
+        await this.sleepOrDebug(sleepTime);
         this.visualize(cIndex);
         this.visualize(pIndex);
     }
 
     private visualize(index: number, bgColor: string = "") {
         this.circleRefArray[index].setBackgroundColor(bgColor);
+    }
+
+    private async sleepOrDebug(sleepTime: number) {
+        if (this.isInDebugMode) {
+            this.isDebuggerWaiting = true;
+            while(await this.checkIsDebuggerWaiting()) {}
+        } else {
+            await sleep(sleepTime);
+        }
+    }
+
+    private async checkIsDebuggerWaiting(): Promise<boolean> {
+        await sleep(100);
+        return this.isDebuggerWaiting;
     }
 }

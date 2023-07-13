@@ -14,6 +14,8 @@ export class HeapHandler {
     constructor(MAX_SIZE, getParent) {
         this.visualizerSpeed = VisualizerSpeeds.DEFAULT;
         this.isRunning = false;
+        this.isDebuggerWaiting = false;
+        this.isInDebugMode = false;
         this.sleepTimes = VisualizerTimes[VisualizerSpeeds.DEFAULT];
         this.MAX_SIZE = MAX_SIZE;
         // GET REFERENCES
@@ -28,6 +30,15 @@ export class HeapHandler {
             const lineId = `line_${getParent(index)}_${index}`;
             this.lineToParentRefArray[index] = new SvgElement(lineId);
         }
+    }
+    setIsDebuggerWaiting(isDebuggerWaiting) {
+        this.isDebuggerWaiting = isDebuggerWaiting;
+    }
+    toggleIsInDebugMode() {
+        this.isInDebugMode = !this.isInDebugMode;
+    }
+    getIsInDebugMode() {
+        return this.isInDebugMode;
     }
     setValue(index, value) {
         const inRange = 0 <= index && index < this.MAX_SIZE;
@@ -57,7 +68,7 @@ export class HeapHandler {
         return __awaiter(this, void 0, void 0, function* () {
             const sleepTime = this.sleepTimes.PUSH;
             this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
-            yield sleep(sleepTime);
+            yield this.sleepOrDebug(sleepTime);
             this.visualize(index);
         });
     }
@@ -65,7 +76,7 @@ export class HeapHandler {
         return __awaiter(this, void 0, void 0, function* () {
             const sleepTime = this.sleepTimes.CERTAIN;
             this.visualize(index, HeapColors.CERTAIN);
-            yield sleep(sleepTime);
+            yield this.sleepOrDebug(sleepTime);
             this.visualize(index);
         });
     }
@@ -74,7 +85,7 @@ export class HeapHandler {
             const sleepTime = this.sleepTimes.COMPARE;
             this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
             this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
-            yield sleep(sleepTime);
+            yield this.sleepOrDebug(sleepTime);
             this.visualize(cIndex);
             this.visualize(pIndex);
         });
@@ -84,12 +95,29 @@ export class HeapHandler {
             const sleepTime = this.sleepTimes.SWAP;
             this.visualize(cIndex, HeapColors.SWAP);
             this.visualize(pIndex, HeapColors.SWAP);
-            yield sleep(sleepTime);
+            yield this.sleepOrDebug(sleepTime);
             this.visualize(cIndex);
             this.visualize(pIndex);
         });
     }
     visualize(index, bgColor = "") {
         this.circleRefArray[index].setBackgroundColor(bgColor);
+    }
+    sleepOrDebug(sleepTime) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.isInDebugMode) {
+                this.isDebuggerWaiting = true;
+                while (yield this.checkIsDebuggerWaiting()) { }
+            }
+            else {
+                yield sleep(sleepTime);
+            }
+        });
+    }
+    checkIsDebuggerWaiting() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield sleep(100);
+            return this.isDebuggerWaiting;
+        });
     }
 }

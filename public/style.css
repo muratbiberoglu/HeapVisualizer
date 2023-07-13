@@ -1,3 +1,7 @@
+:root {
+    --navbarBackgroundColor: #000;
+}
+
 body {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
@@ -8,19 +12,27 @@ body {
 
 .informationBar {
     padding: 0.5rem;
-    background-color: darkblue;
+    background-color: var(--navbarBackgroundColor);
     color: white;
     text-align: center;
     font-size: 1.75rem;
 }
 
-.functionsBar {
+.flexContainerRow {
     display: flex;
     flex-wrap: wrap;
-    align-content: center;
-
+    align-content: normal;
+    align-items: center;
     justify-content: space-evenly;
-    align-items: stretch;
+}
+
+.flexContainerCol {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: normal;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
 }
 
 .title {

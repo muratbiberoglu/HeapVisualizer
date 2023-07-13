@@ -1,4 +1,4 @@
-import { HeapHandler } from "./HeapHandler";
+import { HeapHandler } from "./HeapHandler.js";
 import { HEAP_ERRORS } from "./Utils.js";
 
 export class Heap {

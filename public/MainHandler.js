@@ -14,11 +14,13 @@ export class MainHandler {
     constructor() {
         this.functions = new Map;
         this.heap = new Heap();
-        this.heapElementHandler = this.heap.getHeapElementHandler();
+        this.heapHandler = this.heap.getHeapElementHandler();
         this.arrayField = new FieldElement("array");
         this.speedField = new FieldElement("speedField");
+        this.debugField = new FieldElement("debugField");
         this.informationField = new FieldElement("informationField");
         this.setupFunctionsAndKeys();
+        this.debugField.setColor("red");
     }
     handleKeyDown(KEY) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -27,8 +29,9 @@ export class MainHandler {
             if (!keyIsValid)
                 return;
             try {
-                const running = this.heapElementHandler.getRunning();
-                if (running) {
+                const running = this.heapHandler.getRunning();
+                const keyIsEnter = KEY === 'enter'; // check for not throwing error in debug mode
+                if (running && !keyIsEnter) {
                     throw Error(ALREADY_RUNNING_ERROR);
                 }
                 yield this.run(f);
@@ -41,14 +44,14 @@ export class MainHandler {
     run(f) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                this.heapElementHandler.setRunning(true);
+                this.heapHandler.setRunning(true);
                 yield f();
             }
             catch (e) {
                 throw e;
             }
             finally {
-                this.heapElementHandler.setRunning(false);
+                this.heapHandler.setRunning(false);
             }
         });
     }
@@ -86,15 +89,23 @@ export class MainHandler {
         });
     }
     changeVisualizerSpeed(faster = true) {
-        const currentSpeed = this.heapElementHandler.getVisualizerSpeed();
+        const currentSpeed = this.heapHandler.getVisualizerSpeed();
         if (faster && currentSpeed === VisualizerSpeeds.FAST)
             return;
         if (!faster && currentSpeed === VisualizerSpeeds.SLOW)
             return;
         const newSpeed = faster ? currentSpeed - 1 : currentSpeed + 1;
-        this.heapElementHandler.setVisualizerSpeed(newSpeed);
+        this.heapHandler.setVisualizerSpeed(newSpeed);
         const newSpeedName = VisualizerTimes[newSpeed].NAME;
         this.speedField.setText(newSpeedName);
+    }
+    toggleDebugMode() {
+        this.heapHandler.toggleIsInDebugMode();
+        const isOn = this.heapHandler.getIsInDebugMode();
+        const text = isOn ? "ON" : "OFF";
+        const color = isOn ? "green" : "red";
+        this.debugField.setText(text);
+        this.debugField.setColor(color);
     }
     setupFunctionsAndKeys() {
         this.functions.set('a', () => __awaiter(this, void 0, void 0, function* () { return yield this.push(); }));
@@ -103,5 +114,7 @@ export class MainHandler {
         this.functions.set('p', () => __awaiter(this, void 0, void 0, function* () { return yield this.pop(); }));
         this.functions.set('arrowup', () => this.changeVisualizerSpeed());
         this.functions.set('arrowdown', () => this.changeVisualizerSpeed(false));
+        this.functions.set('d', () => this.toggleDebugMode());
+        this.functions.set('enter', () => this.heapHandler.setIsDebuggerWaiting(false));
     }
 }

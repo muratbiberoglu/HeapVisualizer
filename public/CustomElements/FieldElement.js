@@ -7,4 +7,7 @@ export class FieldElement {
         if (backgroundColor)
             this.element.style.backgroundColor = backgroundColor;
     }
+    setColor(color = "black") {
+        this.element.style.color = color;
+    }
 }
