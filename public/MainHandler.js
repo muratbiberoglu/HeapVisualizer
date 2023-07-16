@@ -41,6 +41,21 @@ export class MainHandler {
             }
         });
     }
+    handleResize() {
+        const screenHeight = window.innerHeight;
+        const screenWidth = window.innerWidth;
+        const navbarWrapper = document.getElementById('navbarWrapper');
+        const nHeight = navbarWrapper === null || navbarWrapper === void 0 ? void 0 : navbarWrapper.offsetHeight;
+        const freeHeight = screenHeight - nHeight - 10;
+        const constraintOnHeight = freeHeight < 0.4 * screenWidth;
+        const svg = document.getElementById('svg');
+        svg.style.removeProperty("maxHeight");
+        svg.style.removeProperty("maxWidth");
+        if (constraintOnHeight)
+            svg.style.maxHeight = `${freeHeight}px`;
+        else
+            svg.style.maxWidth = `${screenWidth}px`;
+    }
     run(f) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

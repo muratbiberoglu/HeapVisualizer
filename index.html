@@ -9,190 +9,197 @@
 </head>
 
 <body>
-    <div class="informationBar title flexContainerRow">
-        <div style="flex-grow: 1;">HEAP VISUALIZER</div>
-        <a href="https://github.com/muratbiberoglu/HeapVisualizer">
-            <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
-                <path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path>
-            </svg>
-        </a>
-    </div>
+    <div id="navbarWrapper">
+        <div class="informationBar title flexContainerRow">
+            <div style="flex-grow: 1;">HEAP VISUALIZER</div>
+            <a href="https://github.com/muratbiberoglu/HeapVisualizer">
+                <svg height="32" aria-hidden="true" viewBox="0 0 24 24" version="1.1" width="32"
+                    data-view-component="true" class="octicon octicon-mark-github v-align-middle color-fg-default">
+                    <path
+                        d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27">
+                    </path>
+                </svg>
+            </a>
+        </div>
 
-    <div class="informationBar flexContainerRow">
-        <div style="flex-grow: 1;">A => Push</div>
-        <div style="flex-grow: 1;">T => Top</div>
-        <div style="flex-grow: 1;">P => Pop</div>
-        <div style="flex-grow: 1;">S => Size</div>
-        <div class="flexContainerCol" style="flex-grow: 2;">
-            <div>D => Debug: <span id="debugField">OFF</span></div>
-            <div>↑↓ Speed: <span id="speedField">NORMAL</span></div>
+        <div class="informationBar flexContainerRow">
+            <div style="flex-grow: 1;">A => Push</div>
+            <div style="flex-grow: 1;">T => Top</div>
+            <div style="flex-grow: 1;">P => Pop</div>
+            <div style="flex-grow: 1;">S => Size</div>
+            <div class="flexContainerCol" style="flex-grow: 2;">
+                <div>D => Debug: <span id="debugField">OFF</span></div>
+                <div>↑↓ Speed: <span id="speedField">NORMAL</span></div>
+            </div>
+        </div>
+        <div id="informationField">Heap is empty</div>
+        <div id="debugInformationField" style="display: none;">DEBUGGER</div>
+        <div class="heapInformationBar">
+            <div>
+                HEAP ARRAY:
+            </div>
+            <div style="flex-grow: 1;" id="array">
+            </div>
         </div>
     </div>
-    <div id="informationField">Heap is empty</div>
-    <div id="debugInformationField" style="display: none;">DEBUGGER</div>
-    <div class="heapInformationBar">
-        <div>
-            HEAP ARRAY:
-        </div>
-        <div style="flex-grow: 1;" id="array">
-        </div>
+    <div id="svgWrapper">
+        <svg id="svg" viewBox="0 0 250 100">
+            <line id="line_7_15" x1="20.0" y1="70" x2="12.5" y2="90" visibility="hidden" />
+            <line id="line_7_16" x1="20.0" y1="70" x2="27.5" y2="90" visibility="hidden" />
+            <line id="line_8_17" x1="50.0" y1="70" x2="42.5" y2="90" visibility="hidden" />
+            <line id="line_8_18" x1="50.0" y1="70" x2="57.5" y2="90" visibility="hidden" />
+            <line id="line_9_19" x1="80.0" y1="70" x2="72.5" y2="90" visibility="hidden" />
+            <line id="line_9_20" x1="80.0" y1="70" x2="87.5" y2="90" visibility="hidden" />
+            <line id="line_10_21" x1="110.0" y1="70" x2="102.5" y2="90" visibility="hidden" />
+            <line id="line_10_22" x1="110.0" y1="70" x2="117.5" y2="90" visibility="hidden" />
+            <line id="line_11_23" x1="140.0" y1="70" x2="132.5" y2="90" visibility="hidden" />
+            <line id="line_11_24" x1="140.0" y1="70" x2="147.5" y2="90" visibility="hidden" />
+            <line id="line_12_25" x1="170.0" y1="70" x2="162.5" y2="90" visibility="hidden" />
+            <line id="line_12_26" x1="170.0" y1="70" x2="177.5" y2="90" visibility="hidden" />
+            <line id="line_13_27" x1="200.0" y1="70" x2="192.5" y2="90" visibility="hidden" />
+            <line id="line_13_28" x1="200.0" y1="70" x2="207.5" y2="90" visibility="hidden" />
+            <line id="line_14_29" x1="230.0" y1="70" x2="222.5" y2="90" visibility="hidden" />
+            <line id="line_14_30" x1="230.0" y1="70" x2="237.5" y2="90" visibility="hidden" />
+            <line id="line_3_7" x1="35.0" y1="50" x2="20.0" y2="70" visibility="hidden" />
+            <line id="line_3_8" x1="35.0" y1="50" x2="50.0" y2="70" visibility="hidden" />
+            <line id="line_4_9" x1="95.0" y1="50" x2="80.0" y2="70" visibility="hidden" />
+            <line id="line_4_10" x1="95.0" y1="50" x2="110.0" y2="70" visibility="hidden" />
+            <line id="line_5_11" x1="155.0" y1="50" x2="140.0" y2="70" visibility="hidden" />
+            <line id="line_5_12" x1="155.0" y1="50" x2="170.0" y2="70" visibility="hidden" />
+            <line id="line_6_13" x1="215.0" y1="50" x2="200.0" y2="70" visibility="hidden" />
+            <line id="line_6_14" x1="215.0" y1="50" x2="230.0" y2="70" visibility="hidden" />
+            <line id="line_1_3" x1="65.0" y1="30" x2="35.0" y2="50" visibility="hidden" />
+            <line id="line_1_4" x1="65.0" y1="30" x2="95.0" y2="50" visibility="hidden" />
+            <line id="line_2_5" x1="185.0" y1="30" x2="155.0" y2="50" visibility="hidden" />
+            <line id="line_2_6" x1="185.0" y1="30" x2="215.0" y2="50" visibility="hidden" />
+            <line id="line_0_1" x1="125.0" y1="10" x2="65.0" y2="30" visibility="hidden" />
+            <line id="line_0_2" x1="125.0" y1="10" x2="185.0" y2="30" visibility="hidden" />
+            <g>
+                <circle id="circle0" cx="125.0" cy="10" r="6" visibility="hidden" />
+                <text id="text0" x="125.0" y="10" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle1" cx="65.0" cy="30" r="6" visibility="hidden" />
+                <text id="text1" x="65.0" y="30" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle2" cx="185.0" cy="30" r="6" visibility="hidden" />
+                <text id="text2" x="185.0" y="30" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle3" cx="35.0" cy="50" r="6" visibility="hidden" />
+                <text id="text3" x="35.0" y="50" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle4" cx="95.0" cy="50" r="6" visibility="hidden" />
+                <text id="text4" x="95.0" y="50" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle5" cx="155.0" cy="50" r="6" visibility="hidden" />
+                <text id="text5" x="155.0" y="50" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle6" cx="215.0" cy="50" r="6" visibility="hidden" />
+                <text id="text6" x="215.0" y="50" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle7" cx="20.0" cy="70" r="6" visibility="hidden" />
+                <text id="text7" x="20.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle8" cx="50.0" cy="70" r="6" visibility="hidden" />
+                <text id="text8" x="50.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle9" cx="80.0" cy="70" r="6" visibility="hidden" />
+                <text id="text9" x="80.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle10" cx="110.0" cy="70" r="6" visibility="hidden" />
+                <text id="text10" x="110.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle11" cx="140.0" cy="70" r="6" visibility="hidden" />
+                <text id="text11" x="140.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle12" cx="170.0" cy="70" r="6" visibility="hidden" />
+                <text id="text12" x="170.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle13" cx="200.0" cy="70" r="6" visibility="hidden" />
+                <text id="text13" x="200.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle14" cx="230.0" cy="70" r="6" visibility="hidden" />
+                <text id="text14" x="230.0" y="70" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle15" cx="12.5" cy="90" r="6" visibility="hidden" />
+                <text id="text15" x="12.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle16" cx="27.5" cy="90" r="6" visibility="hidden" />
+                <text id="text16" x="27.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle17" cx="42.5" cy="90" r="6" visibility="hidden" />
+                <text id="text17" x="42.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle18" cx="57.5" cy="90" r="6" visibility="hidden" />
+                <text id="text18" x="57.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle19" cx="72.5" cy="90" r="6" visibility="hidden" />
+                <text id="text19" x="72.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle20" cx="87.5" cy="90" r="6" visibility="hidden" />
+                <text id="text20" x="87.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle21" cx="102.5" cy="90" r="6" visibility="hidden" />
+                <text id="text21" x="102.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle22" cx="117.5" cy="90" r="6" visibility="hidden" />
+                <text id="text22" x="117.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle23" cx="132.5" cy="90" r="6" visibility="hidden" />
+                <text id="text23" x="132.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle24" cx="147.5" cy="90" r="6" visibility="hidden" />
+                <text id="text24" x="147.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle25" cx="162.5" cy="90" r="6" visibility="hidden" />
+                <text id="text25" x="162.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle26" cx="177.5" cy="90" r="6" visibility="hidden" />
+                <text id="text26" x="177.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle27" cx="192.5" cy="90" r="6" visibility="hidden" />
+                <text id="text27" x="192.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle28" cx="207.5" cy="90" r="6" visibility="hidden" />
+                <text id="text28" x="207.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle29" cx="222.5" cy="90" r="6" visibility="hidden" />
+                <text id="text29" x="222.5" y="90" visibility="hidden"></text>
+            </g>
+            <g>
+                <circle id="circle30" cx="237.5" cy="90" r="6" visibility="hidden" />
+                <text id="text30" x="237.5" y="90" visibility="hidden"></text>
+            </g>
+        </svg>
     </div>
-    <svg id="svg" viewBox="0 0 250 100">
-        <line id="line_7_15" x1="20.0" y1="70" x2="12.5" y2="90" visibility="hidden" />
-        <line id="line_7_16" x1="20.0" y1="70" x2="27.5" y2="90" visibility="hidden" />
-        <line id="line_8_17" x1="50.0" y1="70" x2="42.5" y2="90" visibility="hidden" />
-        <line id="line_8_18" x1="50.0" y1="70" x2="57.5" y2="90" visibility="hidden" />
-        <line id="line_9_19" x1="80.0" y1="70" x2="72.5" y2="90" visibility="hidden" />
-        <line id="line_9_20" x1="80.0" y1="70" x2="87.5" y2="90" visibility="hidden" />
-        <line id="line_10_21" x1="110.0" y1="70" x2="102.5" y2="90" visibility="hidden" />
-        <line id="line_10_22" x1="110.0" y1="70" x2="117.5" y2="90" visibility="hidden" />
-        <line id="line_11_23" x1="140.0" y1="70" x2="132.5" y2="90" visibility="hidden" />
-        <line id="line_11_24" x1="140.0" y1="70" x2="147.5" y2="90" visibility="hidden" />
-        <line id="line_12_25" x1="170.0" y1="70" x2="162.5" y2="90" visibility="hidden" />
-        <line id="line_12_26" x1="170.0" y1="70" x2="177.5" y2="90" visibility="hidden" />
-        <line id="line_13_27" x1="200.0" y1="70" x2="192.5" y2="90" visibility="hidden" />
-        <line id="line_13_28" x1="200.0" y1="70" x2="207.5" y2="90" visibility="hidden" />
-        <line id="line_14_29" x1="230.0" y1="70" x2="222.5" y2="90" visibility="hidden" />
-        <line id="line_14_30" x1="230.0" y1="70" x2="237.5" y2="90" visibility="hidden" />
-        <line id="line_3_7" x1="35.0" y1="50" x2="20.0" y2="70" visibility="hidden" />
-        <line id="line_3_8" x1="35.0" y1="50" x2="50.0" y2="70" visibility="hidden" />
-        <line id="line_4_9" x1="95.0" y1="50" x2="80.0" y2="70" visibility="hidden" />
-        <line id="line_4_10" x1="95.0" y1="50" x2="110.0" y2="70" visibility="hidden" />
-        <line id="line_5_11" x1="155.0" y1="50" x2="140.0" y2="70" visibility="hidden" />
-        <line id="line_5_12" x1="155.0" y1="50" x2="170.0" y2="70" visibility="hidden" />
-        <line id="line_6_13" x1="215.0" y1="50" x2="200.0" y2="70" visibility="hidden" />
-        <line id="line_6_14" x1="215.0" y1="50" x2="230.0" y2="70" visibility="hidden" />
-        <line id="line_1_3" x1="65.0" y1="30" x2="35.0" y2="50" visibility="hidden" />
-        <line id="line_1_4" x1="65.0" y1="30" x2="95.0" y2="50" visibility="hidden" />
-        <line id="line_2_5" x1="185.0" y1="30" x2="155.0" y2="50" visibility="hidden" />
-        <line id="line_2_6" x1="185.0" y1="30" x2="215.0" y2="50" visibility="hidden" />
-        <line id="line_0_1" x1="125.0" y1="10" x2="65.0" y2="30" visibility="hidden" />
-        <line id="line_0_2" x1="125.0" y1="10" x2="185.0" y2="30" visibility="hidden" />
-        <g>
-            <circle id="circle0" cx="125.0" cy="10" r="6" visibility="hidden" />
-            <text id="text0" x="125.0" y="10" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle1" cx="65.0" cy="30" r="6" visibility="hidden" />
-            <text id="text1" x="65.0" y="30" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle2" cx="185.0" cy="30" r="6" visibility="hidden" />
-            <text id="text2" x="185.0" y="30" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle3" cx="35.0" cy="50" r="6" visibility="hidden" />
-            <text id="text3" x="35.0" y="50" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle4" cx="95.0" cy="50" r="6" visibility="hidden" />
-            <text id="text4" x="95.0" y="50" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle5" cx="155.0" cy="50" r="6" visibility="hidden" />
-            <text id="text5" x="155.0" y="50" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle6" cx="215.0" cy="50" r="6" visibility="hidden" />
-            <text id="text6" x="215.0" y="50" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle7" cx="20.0" cy="70" r="6" visibility="hidden" />
-            <text id="text7" x="20.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle8" cx="50.0" cy="70" r="6" visibility="hidden" />
-            <text id="text8" x="50.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle9" cx="80.0" cy="70" r="6" visibility="hidden" />
-            <text id="text9" x="80.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle10" cx="110.0" cy="70" r="6" visibility="hidden" />
-            <text id="text10" x="110.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle11" cx="140.0" cy="70" r="6" visibility="hidden" />
-            <text id="text11" x="140.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle12" cx="170.0" cy="70" r="6" visibility="hidden" />
-            <text id="text12" x="170.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle13" cx="200.0" cy="70" r="6" visibility="hidden" />
-            <text id="text13" x="200.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle14" cx="230.0" cy="70" r="6" visibility="hidden" />
-            <text id="text14" x="230.0" y="70" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle15" cx="12.5" cy="90" r="6" visibility="hidden" />
-            <text id="text15" x="12.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle16" cx="27.5" cy="90" r="6" visibility="hidden" />
-            <text id="text16" x="27.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle17" cx="42.5" cy="90" r="6" visibility="hidden" />
-            <text id="text17" x="42.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle18" cx="57.5" cy="90" r="6" visibility="hidden" />
-            <text id="text18" x="57.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle19" cx="72.5" cy="90" r="6" visibility="hidden" />
-            <text id="text19" x="72.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle20" cx="87.5" cy="90" r="6" visibility="hidden" />
-            <text id="text20" x="87.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle21" cx="102.5" cy="90" r="6" visibility="hidden" />
-            <text id="text21" x="102.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle22" cx="117.5" cy="90" r="6" visibility="hidden" />
-            <text id="text22" x="117.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle23" cx="132.5" cy="90" r="6" visibility="hidden" />
-            <text id="text23" x="132.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle24" cx="147.5" cy="90" r="6" visibility="hidden" />
-            <text id="text24" x="147.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle25" cx="162.5" cy="90" r="6" visibility="hidden" />
-            <text id="text25" x="162.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle26" cx="177.5" cy="90" r="6" visibility="hidden" />
-            <text id="text26" x="177.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle27" cx="192.5" cy="90" r="6" visibility="hidden" />
-            <text id="text27" x="192.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle28" cx="207.5" cy="90" r="6" visibility="hidden" />
-            <text id="text28" x="207.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle29" cx="222.5" cy="90" r="6" visibility="hidden" />
-            <text id="text29" x="222.5" y="90" visibility="hidden"></text>
-        </g>
-        <g>
-            <circle id="circle30" cx="237.5" cy="90" r="6" visibility="hidden" />
-            <text id="text30" x="237.5" y="90" visibility="hidden"></text>
-        </g>
-    </svg>
     <script type="module" src="./public/main.js"></script>
 </body>
 

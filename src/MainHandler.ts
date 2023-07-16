@@ -48,6 +48,26 @@ export class MainHandler {
         }
     }
 
+    handleResize() {
+        const screenHeight = window.innerHeight;
+        const screenWidth = window.innerWidth;
+
+        const navbarWrapper = document.getElementById('navbarWrapper');
+        const nHeight = navbarWrapper?.offsetHeight as number;
+
+        const freeHeight = screenHeight - nHeight - 10;
+        const constraintOnHeight = freeHeight < 0.4 * screenWidth;
+
+        const svg = document.getElementById('svg') as HTMLElement;
+        svg.style.removeProperty("maxHeight");
+        svg.style.removeProperty("maxWidth");
+
+        if (constraintOnHeight)
+            svg.style.maxHeight = `${freeHeight}px`;
+        else
+            svg.style.maxWidth = `${screenWidth}px`;
+    }
+
     private async run(f: handlerFunctionSignature) {
         try {
             this.heapHandler.setRunning(true);

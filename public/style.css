@@ -93,3 +93,7 @@ path {
     stroke: white;
     fill: white;
 }
+
+#svgWrapper {
+    text-align: center;
+}

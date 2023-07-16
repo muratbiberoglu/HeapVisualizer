@@ -1,8 +1,16 @@
 import { MainHandler } from "./MainHandler.js"
 
-const functionHandler = new MainHandler();
+const handler = new MainHandler();
 
 document.onkeydown = async (e) => {
     const key = e.key.toLocaleLowerCase();
-    await functionHandler.handleKeyDown(key);
+    await handler.handleKeyDown(key);
+}
+
+window.onresize = () => {
+    handler.handleResize();
+}
+
+window.onload = () => {
+    handler.handleResize();
 }

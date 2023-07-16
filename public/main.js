@@ -8,8 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { MainHandler } from "./MainHandler.js";
-const functionHandler = new MainHandler();
+const handler = new MainHandler();
 document.onkeydown = (e) => __awaiter(void 0, void 0, void 0, function* () {
     const key = e.key.toLocaleLowerCase();
-    yield functionHandler.handleKeyDown(key);
+    yield handler.handleKeyDown(key);
 });
+window.onresize = () => {
+    handler.handleResize();
+};
+window.onload = () => {
+    handler.handleResize();
+};
