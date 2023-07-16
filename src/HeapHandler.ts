@@ -140,6 +140,6 @@ export class HeapHandler {
 
     private async checkIsDebuggerWaiting(): Promise<boolean> {
         await sleep(100);
-        return this.isDebuggerWaiting;
+        return this.isDebuggerWaiting && this.isInDebugMode;
     }
 }

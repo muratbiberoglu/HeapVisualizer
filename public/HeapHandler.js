@@ -132,7 +132,7 @@ export class HeapHandler {
     checkIsDebuggerWaiting() {
         return __awaiter(this, void 0, void 0, function* () {
             yield sleep(100);
-            return this.isDebuggerWaiting;
+            return this.isDebuggerWaiting && this.isInDebugMode;
         });
     }
 }
