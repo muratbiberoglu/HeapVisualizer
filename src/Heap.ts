@@ -26,32 +26,43 @@ export class Heap {
         if (this.cSize === Heap.MAX_SIZE)
             throw Error(HEAP_ERRORS.FULL);
 
+        let debugText;
+
         // push number to the end
         this.heap[this.cSize] = newValue;
         this.heapElementHandler.setValue(this.cSize, newValue);
 
         // set visible hidden items
         this.heapElementHandler.setVisibleById(this.cSize);
-        await this.heapElementHandler.visualizePushed(this.cSize);
+        debugText = `${newValue} pushed end of the heap`;
+        await this.heapElementHandler.visualizePushed(this.cSize, debugText);
 
         // set current index and increment size
         let cIndex = this.cSize;
         this.cSize++;
 
         while (cIndex) {
-            // calculate parent index
+            // calculate parent index and get parent value
             const pIndex = Heap.getParent(cIndex);
+            const pValue = this.heap[pIndex];
 
             // if parent is greater than or equal then break
-            await this.heapElementHandler.visualizeCompare(cIndex, pIndex);
-            if (newValue <= this.heap[pIndex]) break;
+            debugText = `Comparing ${newValue} (child) with ${pValue} (parent)`;
+            await this.heapElementHandler.visualizeCompare(cIndex, pIndex, debugText);
+            if (newValue <= this.heap[pIndex]) {
+                debugText = `Since ${newValue} (child) is not greater than ${pValue} (parent) its position is certain`;
+                await this.heapElementHandler.visualizeCertain(cIndex, debugText);
+                return;
+            }
 
-            await this.heapElementHandler.visualizeSwap(cIndex, pIndex);
+            debugText = `Swapping ${newValue} (child) with ${pValue} (parent)`;
+            await this.heapElementHandler.visualizeSwap(cIndex, pIndex, debugText);
             this.swap(cIndex, pIndex);
             cIndex = pIndex;
         }
 
-        await this.heapElementHandler.visualizeCertain(cIndex);
+        debugText = `Since ${newValue} is at the top of the heap its position is certain`;
+        await this.heapElementHandler.visualizeCertain(cIndex, debugText);
     }
 
     top(): number {

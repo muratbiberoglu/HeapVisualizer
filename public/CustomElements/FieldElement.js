@@ -10,4 +10,10 @@ export class FieldElement {
     setColor(color = "black") {
         this.element.style.color = color;
     }
+    setVisible(visible = true) {
+        if (visible)
+            this.element.style.removeProperty("display");
+        else
+            this.element.style.display = "none";
+    }
 }

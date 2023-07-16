@@ -13,4 +13,11 @@ export class FieldElement {
     setColor(color: string = "black") {
         this.element.style.color = color;
     }
+
+    setVisible(visible: boolean = true) {
+        if (visible)
+            this.element.style.removeProperty("display");
+        else
+            this.element.style.display = "none";
+    }
 }

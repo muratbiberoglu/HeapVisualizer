@@ -62,6 +62,14 @@ body {
     text-align: center;
 }
 
+#debugInformationField {
+    padding: 0.25rem;
+    font-size: 1.75rem;
+    background-color: darkorange;
+    color: black;
+    text-align: center;
+}
+
 /* svg element styles */
 
 circle {

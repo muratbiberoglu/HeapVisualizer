@@ -25,27 +25,36 @@ export class Heap {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.cSize === Heap.MAX_SIZE)
                 throw Error(HEAP_ERRORS.FULL);
+            let debugText;
             // push number to the end
             this.heap[this.cSize] = newValue;
             this.heapElementHandler.setValue(this.cSize, newValue);
             // set visible hidden items
             this.heapElementHandler.setVisibleById(this.cSize);
-            yield this.heapElementHandler.visualizePushed(this.cSize);
+            debugText = `${newValue} pushed end of the heap`;
+            yield this.heapElementHandler.visualizePushed(this.cSize, debugText);
             // set current index and increment size
             let cIndex = this.cSize;
             this.cSize++;
             while (cIndex) {
-                // calculate parent index
+                // calculate parent index and get parent value
                 const pIndex = Heap.getParent(cIndex);
+                const pValue = this.heap[pIndex];
                 // if parent is greater than or equal then break
-                yield this.heapElementHandler.visualizeCompare(cIndex, pIndex);
-                if (newValue <= this.heap[pIndex])
-                    break;
-                yield this.heapElementHandler.visualizeSwap(cIndex, pIndex);
+                debugText = `Comparing ${newValue} (child) with ${pValue} (parent)`;
+                yield this.heapElementHandler.visualizeCompare(cIndex, pIndex, debugText);
+                if (newValue <= this.heap[pIndex]) {
+                    debugText = `Since ${newValue} (child) is not greater than ${pValue} (parent) its position is certain`;
+                    yield this.heapElementHandler.visualizeCertain(cIndex, debugText);
+                    return;
+                }
+                debugText = `Swapping ${newValue} (child) with ${pValue} (parent)`;
+                yield this.heapElementHandler.visualizeSwap(cIndex, pIndex, debugText);
                 this.swap(cIndex, pIndex);
                 cIndex = pIndex;
             }
-            yield this.heapElementHandler.visualizeCertain(cIndex);
+            debugText = `Since ${newValue} is at the top of the heap its position is certain`;
+            yield this.heapElementHandler.visualizeCertain(cIndex, debugText);
         });
     }
     top() {

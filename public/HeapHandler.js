@@ -10,17 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { HEAP_ERRORS, HeapColors, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
 import { SvgElement } from "./CustomElements/SvgElement.js";
 import { SvgTextElement } from "./CustomElements/SvgTextElement.js";
+import { FieldElement } from "./CustomElements/FieldElement.js";
 export class HeapHandler {
     constructor(MAX_SIZE, getParent) {
         this.visualizerSpeed = VisualizerSpeeds.DEFAULT;
         this.isRunning = false;
+        this.sleepTimes = VisualizerTimes[VisualizerSpeeds.DEFAULT];
+        // debugger
         this.isDebuggerWaiting = false;
         this.isInDebugMode = false;
-        this.sleepTimes = VisualizerTimes[VisualizerSpeeds.DEFAULT];
         this.MAX_SIZE = MAX_SIZE;
+        this.debugInformationField = new FieldElement('debugInformationField');
         // GET REFERENCES
-        this.circleRefArray = Array(this.MAX_SIZE);
-        this.textRefArray = Array(this.MAX_SIZE);
+        this.circleRefArray = new Array(this.MAX_SIZE);
+        this.textRefArray = new Array(this.MAX_SIZE);
         this.lineToParentRefArray = new Array(this.MAX_SIZE);
         for (let index = 0; index < this.MAX_SIZE; index++) {
             const circleId = `circle${index}`;
@@ -36,6 +39,7 @@ export class HeapHandler {
     }
     toggleIsInDebugMode() {
         this.isInDebugMode = !this.isInDebugMode;
+        this.debugInformationField.setVisible(this.isInDebugMode);
     }
     getIsInDebugMode() {
         return this.isInDebugMode;
@@ -64,37 +68,45 @@ export class HeapHandler {
     getRunning() {
         return this.isRunning;
     }
-    visualizePushed(index) {
+    visualizePushed(index, debugText = "") {
         return __awaiter(this, void 0, void 0, function* () {
             const sleepTime = this.sleepTimes.PUSH;
             this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
+            if (this.isInDebugMode)
+                this.debugInformationField.setText(debugText);
             yield this.sleepOrDebug(sleepTime);
             this.visualize(index);
         });
     }
-    visualizeCertain(index) {
+    visualizeCertain(index, debugText = "") {
         return __awaiter(this, void 0, void 0, function* () {
             const sleepTime = this.sleepTimes.CERTAIN;
             this.visualize(index, HeapColors.CERTAIN);
+            if (this.isInDebugMode)
+                this.debugInformationField.setText(debugText);
             yield this.sleepOrDebug(sleepTime);
             this.visualize(index);
         });
     }
-    visualizeCompare(cIndex, pIndex) {
+    visualizeCompare(cIndex, pIndex, debugText = "") {
         return __awaiter(this, void 0, void 0, function* () {
             const sleepTime = this.sleepTimes.COMPARE;
             this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
             this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
+            if (this.isInDebugMode)
+                this.debugInformationField.setText(debugText);
             yield this.sleepOrDebug(sleepTime);
             this.visualize(cIndex);
             this.visualize(pIndex);
         });
     }
-    visualizeSwap(cIndex, pIndex) {
+    visualizeSwap(cIndex, pIndex, debugText = "") {
         return __awaiter(this, void 0, void 0, function* () {
             const sleepTime = this.sleepTimes.SWAP;
             this.visualize(cIndex, HeapColors.SWAP);
             this.visualize(pIndex, HeapColors.SWAP);
+            if (this.isInDebugMode)
+                this.debugInformationField.setText(debugText);
             yield this.sleepOrDebug(sleepTime);
             this.visualize(cIndex);
             this.visualize(pIndex);
@@ -108,6 +120,9 @@ export class HeapHandler {
             if (this.isInDebugMode) {
                 this.isDebuggerWaiting = true;
                 while (yield this.checkIsDebuggerWaiting()) { }
+                if (this.isInDebugMode) {
+                    this.debugInformationField.setText("DEBUGGER");
+                }
             }
             else {
                 yield sleep(sleepTime);
