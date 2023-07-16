@@ -40,6 +40,7 @@ export class HeapHandler {
     toggleIsInDebugMode() {
         this.isInDebugMode = !this.isInDebugMode;
         this.debugInformationField.setVisible(this.isInDebugMode);
+        this.debugInformationField.setText("DEBUGGER");
     }
     getIsInDebugMode() {
         return this.isInDebugMode;
@@ -68,51 +69,22 @@ export class HeapHandler {
     getRunning() {
         return this.isRunning;
     }
-    visualizePushed(index, debugText = "") {
+    visualize(visualizeDTO) {
         return __awaiter(this, void 0, void 0, function* () {
-            const sleepTime = this.sleepTimes.PUSH;
-            this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
-            if (this.isInDebugMode)
-                this.debugInformationField.setText(debugText);
+            const sleepTime = this.sleepTimes[visualizeDTO.visualizeStep];
+            const bgcolor = HeapColors[visualizeDTO.visualizeStep];
+            visualizeDTO.indexes.forEach((index) => {
+                this.visualizeByIndex(index, bgcolor);
+            });
+            if (this.isInDebugMode && visualizeDTO.debugText)
+                this.debugInformationField.setText(visualizeDTO.debugText);
             yield this.sleepOrDebug(sleepTime);
-            this.visualize(index);
+            visualizeDTO.indexes.forEach((index) => {
+                this.visualizeByIndex(index);
+            });
         });
     }
-    visualizeCertain(index, debugText = "") {
-        return __awaiter(this, void 0, void 0, function* () {
-            const sleepTime = this.sleepTimes.CERTAIN;
-            this.visualize(index, HeapColors.CERTAIN);
-            if (this.isInDebugMode)
-                this.debugInformationField.setText(debugText);
-            yield this.sleepOrDebug(sleepTime);
-            this.visualize(index);
-        });
-    }
-    visualizeCompare(cIndex, pIndex, debugText = "") {
-        return __awaiter(this, void 0, void 0, function* () {
-            const sleepTime = this.sleepTimes.COMPARE;
-            this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
-            this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
-            if (this.isInDebugMode)
-                this.debugInformationField.setText(debugText);
-            yield this.sleepOrDebug(sleepTime);
-            this.visualize(cIndex);
-            this.visualize(pIndex);
-        });
-    }
-    visualizeSwap(cIndex, pIndex, debugText = "") {
-        return __awaiter(this, void 0, void 0, function* () {
-            const sleepTime = this.sleepTimes.SWAP;
-            this.visualize(cIndex, HeapColors.SWAP);
-            this.visualize(pIndex, HeapColors.SWAP);
-            if (this.isInDebugMode)
-                this.debugInformationField.setText(debugText);
-            yield this.sleepOrDebug(sleepTime);
-            this.visualize(cIndex);
-            this.visualize(pIndex);
-        });
-    }
-    visualize(index, bgColor = "") {
+    visualizeByIndex(index, bgColor = "") {
         this.circleRefArray[index].setBackgroundColor(bgColor);
     }
     sleepOrDebug(sleepTime) {

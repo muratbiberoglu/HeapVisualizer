@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
-import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeeds, VisualizerTimes } from "./Utils.js";
+import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds } from "./Utils.js";
 export class MainHandler {
     constructor() {
         this.functions = new Map;
@@ -111,7 +111,7 @@ export class MainHandler {
             return;
         const newSpeed = faster ? currentSpeed - 1 : currentSpeed + 1;
         this.heapHandler.setVisualizerSpeed(newSpeed);
-        const newSpeedName = VisualizerTimes[newSpeed].NAME;
+        const newSpeedName = VisualizerSpeedNames[newSpeed];
         this.speedField.setText(newSpeedName);
     }
     toggleDebugMode() {

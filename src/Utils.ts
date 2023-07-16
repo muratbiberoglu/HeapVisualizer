@@ -1,19 +1,4 @@
-export const HeapColors = {
-    NEW_PUSHED_ITEM: "lightgreen",
-    COMPARE_ITEMS: {
-        "child": "lightgreen",
-        "parent": "green",
-    },
-    SWAP: "yellow",
-    CERTAIN: "cyan",
-}
-
-export type SleepTimesType = {
-    PUSH: number,
-    SWAP: number,
-    COMPARE: number,
-    CERTAIN: number,
-}
+export const HeapColors = ["powderblue", "orange", "yellow", "lightgreen"]
 
 export const VisualizerSpeeds = {
     FAST: 0,
@@ -22,29 +7,20 @@ export const VisualizerSpeeds = {
     DEFAULT: 1,
 }
 
+export enum VisualizerSteps {
+    PUSH,
+    SWAP,
+    COMPARE,
+    CERTAIN,
+}
+
+export const VisualizerSpeedNames = ["FAST", "NORMAL", "SLOW"];
+
 export const VisualizerTimes = [
-    {
-        NAME: "FAST",
-        PUSH: 200,
-        SWAP: 100,
-        COMPARE: 100,
-        CERTAIN: 300,
-    },
-    {
-        NAME: "NORMAL",
-        PUSH: 400,
-        SWAP: 200,
-        COMPARE: 200,
-        CERTAIN: 600,
-    },
-    {
-        NAME: "SLOW",
-        PUSH: 600,
-        SWAP: 300,
-        COMPARE: 300,
-        CERTAIN: 600,
-    }
-]
+    [200, 100, 100, 300],
+    [400, 200, 200, 600],
+    [600, 300, 300, 600],
+];
 
 export const InformationFieldColors = {
     DARKGREEN: "darkgreen",
@@ -62,3 +38,9 @@ export const HEAP_ERRORS = {
 export const ALREADY_RUNNING_ERROR = "Already a visualization is running. Can not started.";
 
 export const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+export interface VisualizeDTO {
+    visualizeStep: number;
+    indexes: number[];
+    debugText: string;
+}

@@ -1,4 +1,4 @@
-import { HEAP_ERRORS, HeapColors, SleepTimesType, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
+import { HEAP_ERRORS, HeapColors, VisualizeDTO, VisualizerSpeeds, VisualizerTimes, sleep } from "./Utils.js";
 import { SvgElement } from "./CustomElements/SvgElement.js";
 import { SvgTextElement } from "./CustomElements/SvgTextElement.js";
 import { FieldElement } from "./CustomElements/FieldElement.js";
@@ -11,7 +11,7 @@ export class HeapHandler {
 
     private visualizerSpeed: number = VisualizerSpeeds.DEFAULT;
     private isRunning: boolean = false;
-    private sleepTimes: SleepTimesType = VisualizerTimes[VisualizerSpeeds.DEFAULT];
+    private sleepTimes: number[] = VisualizerTimes[VisualizerSpeeds.DEFAULT];
 
     // debugger
     private isDebuggerWaiting: boolean = false;
@@ -46,6 +46,7 @@ export class HeapHandler {
     toggleIsInDebugMode() {
         this.isInDebugMode = !this.isInDebugMode;
         this.debugInformationField.setVisible(this.isInDebugMode);
+        this.debugInformationField.setText("DEBUGGER");
     }
 
     getIsInDebugMode() {
@@ -82,47 +83,23 @@ export class HeapHandler {
         return this.isRunning;
     }
 
-    async visualizePushed(index: number, debugText: string = "") {
-        const sleepTime = this.sleepTimes.PUSH;
-        this.visualize(index, HeapColors.NEW_PUSHED_ITEM);
-        if(this.isInDebugMode)
-            this.debugInformationField.setText(debugText);
+    async visualize(visualizeDTO: VisualizeDTO) {
+        const sleepTime = this.sleepTimes[visualizeDTO.visualizeStep];
+        const bgcolor = HeapColors[visualizeDTO.visualizeStep];
+        visualizeDTO.indexes.forEach((index) => {
+            this.visualizeByIndex(index, bgcolor);
+        })
+
+        if(this.isInDebugMode && visualizeDTO.debugText)
+            this.debugInformationField.setText(visualizeDTO.debugText);
         await this.sleepOrDebug(sleepTime);
-        this.visualize(index);
+
+        visualizeDTO.indexes.forEach((index) => {
+            this.visualizeByIndex(index);
+        })
     }
 
-    async visualizeCertain(index: number, debugText: string = "") {
-        const sleepTime = this.sleepTimes.CERTAIN;
-        this.visualize(index, HeapColors.CERTAIN);
-        if(this.isInDebugMode)
-            this.debugInformationField.setText(debugText);
-        await this.sleepOrDebug(sleepTime);
-        this.visualize(index);
-    }
-
-    async visualizeCompare(cIndex: number, pIndex: number, debugText: string = "") {
-        const sleepTime = this.sleepTimes.COMPARE;
-        this.visualize(cIndex, HeapColors.COMPARE_ITEMS.child);
-        this.visualize(pIndex, HeapColors.COMPARE_ITEMS.parent);
-        if(this.isInDebugMode)
-            this.debugInformationField.setText(debugText);
-        await this.sleepOrDebug(sleepTime);
-        this.visualize(cIndex);
-        this.visualize(pIndex);
-    }
-
-    async visualizeSwap(cIndex: number, pIndex: number, debugText: string = "") {
-        const sleepTime = this.sleepTimes.SWAP;
-        this.visualize(cIndex, HeapColors.SWAP);
-        this.visualize(pIndex, HeapColors.SWAP);
-        if(this.isInDebugMode)
-            this.debugInformationField.setText(debugText);
-        await this.sleepOrDebug(sleepTime);
-        this.visualize(cIndex);
-        this.visualize(pIndex);
-    }
-
-    private visualize(index: number, bgColor: string = "") {
+    private visualizeByIndex(index: number, bgColor: string = "") {
         this.circleRefArray[index].setBackgroundColor(bgColor);
     }
 

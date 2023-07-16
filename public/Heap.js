@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { HeapHandler } from "./HeapHandler.js";
-import { HEAP_ERRORS } from "./Utils.js";
+import { HEAP_ERRORS, VisualizerSteps } from "./Utils.js";
 export class Heap {
     constructor() {
         this.cSize = 0;
@@ -25,14 +25,17 @@ export class Heap {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.cSize === Heap.MAX_SIZE)
                 throw Error(HEAP_ERRORS.FULL);
-            let debugText;
             // push number to the end
             this.heap[this.cSize] = newValue;
             this.heapElementHandler.setValue(this.cSize, newValue);
             // set visible hidden items
             this.heapElementHandler.setVisibleById(this.cSize);
-            debugText = `${newValue} pushed end of the heap`;
-            yield this.heapElementHandler.visualizePushed(this.cSize, debugText);
+            // visualize push
+            yield this.heapElementHandler.visualize({
+                visualizeStep: VisualizerSteps.PUSH,
+                indexes: [this.cSize],
+                debugText: `${newValue} pushed end of the heap`,
+            });
             // set current index and increment size
             let cIndex = this.cSize;
             this.cSize++;
@@ -40,21 +43,37 @@ export class Heap {
                 // calculate parent index and get parent value
                 const pIndex = Heap.getParent(cIndex);
                 const pValue = this.heap[pIndex];
+                // visualize compare
+                yield this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.COMPARE,
+                    indexes: [cIndex, pIndex],
+                    debugText: `Comparing ${newValue} (child) with ${pValue} (parent)`,
+                });
                 // if parent is greater than or equal then break
-                debugText = `Comparing ${newValue} (child) with ${pValue} (parent)`;
-                yield this.heapElementHandler.visualizeCompare(cIndex, pIndex, debugText);
                 if (newValue <= this.heap[pIndex]) {
-                    debugText = `Since ${newValue} (child) is not greater than ${pValue} (parent) its position is certain`;
-                    yield this.heapElementHandler.visualizeCertain(cIndex, debugText);
+                    // visualize certain
+                    yield this.heapElementHandler.visualize({
+                        visualizeStep: VisualizerSteps.CERTAIN,
+                        indexes: [cIndex],
+                        debugText: `Since ${newValue} (child) is not greater than ${pValue} (parent) its position is certain`,
+                    });
                     return;
                 }
-                debugText = `Swapping ${newValue} (child) with ${pValue} (parent)`;
-                yield this.heapElementHandler.visualizeSwap(cIndex, pIndex, debugText);
+                // visualize swap
+                yield this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.SWAP,
+                    indexes: [cIndex, pIndex],
+                    debugText: `Swapping ${newValue} (child) with ${pValue} (parent)`,
+                });
                 this.swap(cIndex, pIndex);
                 cIndex = pIndex;
             }
-            debugText = `Since ${newValue} is at the top of the heap its position is certain`;
-            yield this.heapElementHandler.visualizeCertain(cIndex, debugText);
+            // visualize certain
+            yield this.heapElementHandler.visualize({
+                visualizeStep: VisualizerSteps.CERTAIN,
+                indexes: [cIndex],
+                debugText: `Since ${newValue} is at the top of the heap its position is certain`,
+            });
         });
     }
     top() {
