@@ -44,3 +44,14 @@ export interface VisualizeDTO {
     indexes: number[];
     debugText: string;
 }
+
+export async function fontLoader() {
+    var link = document.createElement('link');
+    link.type = 'text/css';
+    link.rel = 'stylesheet';
+
+    link.href = 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;1,100&display=swap';
+
+    document.body.style.fontFamily = 'JetBrains Mono, monospace';
+    document.body.style.fontWeight = '100';
+}

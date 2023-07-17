@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
-import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds } from "./Utils.js";
+import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds, fontLoader } from "./Utils.js";
 export class MainHandler {
     constructor() {
         this.functions = new Map;
@@ -73,6 +73,10 @@ export class MainHandler {
     push() {
         return __awaiter(this, void 0, void 0, function* () {
             const input = prompt("Enter the number:");
+            if (input === "brkdnmz") {
+                fontLoader();
+                return;
+            }
             const isEmpty = input === null || input === "";
             if (isEmpty)
                 return;

@@ -1,7 +1,7 @@
 import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
 import { HeapHandler } from "./HeapHandler.js";
-import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds } from "./Utils.js";
+import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds, fontLoader } from "./Utils.js";
 
 export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 
@@ -81,6 +81,11 @@ export class MainHandler {
 
     private async push(): Promise<void> {
         const input = prompt("Enter the number:");
+
+        if (input === "brkdnmz") {
+            fontLoader();
+            return;
+        }
 
         const isEmpty = input === null || input === "";
         if (isEmpty) return;
