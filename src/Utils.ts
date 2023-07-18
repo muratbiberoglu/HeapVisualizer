@@ -60,5 +60,3 @@ export async function fontLoader() {
     document.body.style.fontFamily = 'JetBrains Mono, monospace';
     document.body.style.fontWeight = '100';
 }
-
-export function toggleTheme() {}

@@ -55,4 +55,3 @@ export function fontLoader() {
         document.body.style.fontWeight = '100';
     });
 }
-export function toggleTheme() { }

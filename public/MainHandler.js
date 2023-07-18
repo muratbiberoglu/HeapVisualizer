@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
+import { ThemeHandler } from "./ThemeHandler.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds, fontLoader } from "./Utils.js";
 export class MainHandler {
     constructor() {
@@ -20,7 +21,8 @@ export class MainHandler {
         this.debugField = new FieldElement("debugField");
         this.informationField = new FieldElement("informationField");
         this.setupFunctionsAndKeys();
-        this.debugField.setColor("red");
+        this.themeHandler = new ThemeHandler("toggleThemeButton");
+        this.debugField.setColor("red"); // indicates debugger is off
     }
     handleKeyDown(KEY) {
         return __awaiter(this, void 0, void 0, function* () {

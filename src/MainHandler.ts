@@ -1,6 +1,7 @@
 import { FieldElement } from "./CustomElements/FieldElement.js";
 import { Heap } from "./Heap.js";
 import { HeapHandler } from "./HeapHandler.js";
+import { ThemeHandler } from "./ThemeHandler.js";
 import { ALREADY_RUNNING_ERROR, InformationFieldColors, VisualizerSpeedNames, VisualizerSpeeds, fontLoader } from "./Utils.js";
 
 export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
@@ -8,6 +9,7 @@ export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 export class MainHandler {
     private heap: Heap;
     private heapHandler: HeapHandler;
+    private themeHandler: ThemeHandler;
 
     private arrayField: FieldElement;
     private speedField: FieldElement;
@@ -27,7 +29,9 @@ export class MainHandler {
 
         this.setupFunctionsAndKeys();
 
-        this.debugField.setColor("red");
+        this.themeHandler = new ThemeHandler("toggleThemeButton");
+
+        this.debugField.setColor("red");    // indicates debugger is off
     }
 
     async handleKeyDown(KEY: string) {

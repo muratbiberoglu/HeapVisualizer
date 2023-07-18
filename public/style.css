@@ -28,7 +28,6 @@
 
 @media(prefers-color-scheme: dark) {
     :root {
-        /* --text: blue; */
         --text: var(--text-dark);
         --bg-1: var(--bg-dark-1);
         --bg-2: var(--bg-dark-2);
@@ -52,15 +51,39 @@
         --bg-info-ok: var(--bg-info-ok-light);
         --bg-info-error: var(--bg-info-error-light);
         --bg-debug: var(--bg-debug-light);
-        --push: var(--bg-info-ok-dark);
-        --swap: var(--bg-info-error-dark);
-        --compare: var(--bg-debug-dark);
-        --certain: var(--bg-dark-3);
         --push: var(--push-light);
         --swap: var(--swap-light);
         --compare: var(--compare-light);
         --certain: var(--certain-light);
     }
+}
+
+[color-scheme="dark"] {
+    --text: var(--text-dark);
+    --bg-1: var(--bg-dark-1);
+    --bg-2: var(--bg-dark-2);
+    --bg-3: var(--bg-dark-3);
+    --bg-info-ok: var(--bg-info-ok-dark);
+    --bg-info-error: var(--bg-info-error-dark);
+    --bg-debug: var(--bg-debug-dark);
+    --push: var(--push-dark);
+    --swap: var(--swap-dark);
+    --compare: var(--compare-dark);
+    --certain: var(--certain-dark);
+}
+
+[color-scheme="light"] {
+    --text: var(--text-light);
+    --bg-1: var(--bg-light-1);
+    --bg-2: var(--bg-light-2);
+    --bg-3: var(--bg-light-3);
+    --bg-info-ok: var(--bg-info-ok-light);
+    --bg-info-error: var(--bg-info-error-light);
+    --bg-debug: var(--bg-debug-light);
+    --push: var(--push-light);
+    --swap: var(--swap-light);
+    --compare: var(--compare-light);
+    --certain: var(--certain-light);
 }
 
 body {
@@ -99,6 +122,30 @@ body {
 
 .title {
     font-size: 2.5rem;
+}
+
+#toggleThemeButton {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: var(--bg-2);
+    border: 0px solid var(--text);
+    color: var(--text);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+}
+
+#githubButton {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 0px solid var(--text);
+    background-color: var(--bg-2);
+    color: var(--text);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
 }
 
 /* heap related information style */
