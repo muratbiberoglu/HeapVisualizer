@@ -44,7 +44,7 @@ export class MainHandler {
             }
             await this.run(f);
         } catch (e) {
-            this.informationField.setText(e as string, InformationFieldColors.DARKRED);
+            this.informationField.setText(e as string, InformationFieldColors.ERROR);
         }
     }
 
@@ -96,23 +96,23 @@ export class MainHandler {
 
         await this.heap.push(newValue);
         this.arrayField.setText(this.heap.getArrayString(), "none");
-        this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.DARKGREEN);
+        this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.OK);
     }
 
     private async top(): Promise<void> {
         const topElement = this.heap.top();
-        this.informationField.setText(`Top element of the heap is ${topElement}`, InformationFieldColors.DARKGREEN);
+        this.informationField.setText(`Top element of the heap is ${topElement}`, InformationFieldColors.OK);
     }
 
     private async pop(): Promise<void> {
         const poppedElement = this.heap.pop();
-        this.informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.DARKGREEN);
+        this.informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.OK);
         this.arrayField.setText(this.heap.getArrayString());
     }
 
     private async size(): Promise<void> {
         const size = this.heap.size();
-        this.informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.DARKGREEN);
+        this.informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.OK);
     }
 
     private changeVisualizerSpeed(faster: boolean = true): void {

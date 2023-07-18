@@ -1,19 +1,81 @@
 :root {
     --navbarBackgroundColor: #000;
+
+    --text-light: #000;
+    --bg-light-1: #fff;
+    --bg-light-2: #ddd;
+    --bg-light-3: #bbb;
+    --bg-info-ok-light: rgb(155, 255, 155);
+    --bg-info-error-light: rgb(255, 120, 120);
+    --bg-debug-light: rgb(255, 233, 106);
+    --push-light: var(--bg-light-3);
+    --swap-light: var(--bg-info-error-light);
+    --compare-light: var(--bg-debug-light);
+    --certain-light: var(--bg-info-ok-light);
+
+    --text-dark: #fff;
+    --bg-dark-1: #222;
+    --bg-dark-2: #444;
+    --bg-dark-3: #888;
+    --bg-info-ok-dark: rgb(0, 150, 0);
+    --bg-info-error-dark: rgb(210, 0, 0);
+    --bg-debug-dark: rgb(235, 119, 3);
+    --push-dark: var(--bg-dark-3);
+    --swap-dark: var(--bg-info-error-dark);
+    --compare-dark: var(--bg-debug-dark);
+    --certain-dark: var(--bg-info-ok-dark);
+}
+
+@media(prefers-color-scheme: dark) {
+    :root {
+        /* --text: blue; */
+        --text: var(--text-dark);
+        --bg-1: var(--bg-dark-1);
+        --bg-2: var(--bg-dark-2);
+        --bg-3: var(--bg-dark-3);
+        --bg-info-ok: var(--bg-info-ok-dark);
+        --bg-info-error: var(--bg-info-error-dark);
+        --bg-debug: var(--bg-debug-dark);
+        --push: var(--push-dark);
+        --swap: var(--swap-dark);
+        --compare: var(--compare-dark);
+        --certain: var(--certain-dark);
+    }
+}
+
+@media(prefers-color-scheme: light) {
+    :root {
+        --text: var(--text-light);
+        --bg-1: var(--bg-light-1);
+        --bg-2: var(--bg-light-2);
+        --bg-3: var(--bg-light-3);
+        --bg-info-ok: var(--bg-info-ok-light);
+        --bg-info-error: var(--bg-info-error-light);
+        --bg-debug: var(--bg-debug-light);
+        --push: var(--bg-info-ok-dark);
+        --swap: var(--bg-info-error-dark);
+        --compare: var(--bg-debug-dark);
+        --certain: var(--bg-dark-3);
+        --push: var(--push-light);
+        --swap: var(--swap-light);
+        --compare: var(--compare-light);
+        --certain: var(--certain-light);
+    }
 }
 
 body {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     margin: 0px;
+    background-color: var(--bg-1);
 }
 
 /* top bar style */
 
 .informationBar {
     padding: 0.5rem;
-    background-color: var(--navbarBackgroundColor);
-    color: white;
+    background-color: var(--bg-2);
+    color: var(--text);
     text-align: center;
     font-size: 1.75rem;
 }
@@ -52,29 +114,32 @@ body {
     text-align: center;
 
     font-size: 1.5rem;
+
+    color: var(--text);
 }
 
 #informationField {
     padding: 0.25rem;
     font-size: 1.75rem;
-    background-color: darkgreen;
-    color: white;
+    background-color: var(--bg-info-ok);
+    color: var(--text);
     text-align: center;
 }
 
 #debugInformationField {
     padding: 0.25rem;
     font-size: 1.75rem;
-    background-color: darkorange;
-    color: black;
+    background-color: var(--bg-debug);
+    color: var(--text);
     text-align: center;
 }
 
 /* svg element styles */
 
 circle {
-    stroke: darkblue;
-    stroke-width: 0.3;
+    stroke: var(--text);
+    stroke-width: 0.4;
+    fill: var(--bg-1);
 }
 
 text {
@@ -82,16 +147,18 @@ text {
     text-anchor: middle;
     alignment-baseline: middle;
     stroke-width: 0.1;
+    stroke: var(--text);
+    fill: var(--text);
 }
 
 line {
-    stroke: black;
+    stroke: var(--text);
     stroke-width: 1;
 }
 
 path {
-    stroke: white;
-    fill: white;
+    stroke: var(--text);
+    fill: var(--text);
 }
 
 #svgWrapper {

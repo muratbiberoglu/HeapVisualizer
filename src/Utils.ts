@@ -1,4 +1,9 @@
-export const HeapColors = ["powderblue", "orange", "yellow", "lightgreen"]
+export const HeapColors = [
+    "var(--push)",
+    "var(--swap)",
+    "var(--compare)",
+    "var(--certain)",
+]
 
 export const VisualizerSpeeds = {
     FAST: 0,
@@ -23,8 +28,8 @@ export const VisualizerTimes = [
 ];
 
 export const InformationFieldColors = {
-    DARKGREEN: "darkgreen",
-    DARKRED: "darkred",
+    OK: "var(--bg-info-ok)",
+    ERROR: "var(--bg-info-error)",
 }
 
 export const HEAP_ERRORS = {
@@ -55,3 +60,5 @@ export async function fontLoader() {
     document.body.style.fontFamily = 'JetBrains Mono, monospace';
     document.body.style.fontWeight = '100';
 }
+
+export function toggleTheme() {}

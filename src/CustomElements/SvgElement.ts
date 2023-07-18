@@ -19,8 +19,9 @@ export class SvgElement {
 
     setBackgroundColor(newBackgroundColor: string = "") {
         if (!this.isExist) return;
+        this.element.style.removeProperty("fill");
         if (newBackgroundColor === "")
-            newBackgroundColor = "white";
-        this.element.setAttribute("fill", newBackgroundColor);
+            newBackgroundColor = "var(--bg-1)";
+        this.element.style.setProperty("fill", newBackgroundColor);
     }
 }

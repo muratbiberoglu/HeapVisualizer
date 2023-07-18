@@ -7,7 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-export const HeapColors = ["powderblue", "orange", "yellow", "lightgreen"];
+export const HeapColors = [
+    "var(--push)",
+    "var(--swap)",
+    "var(--compare)",
+    "var(--certain)",
+];
 export const VisualizerSpeeds = {
     FAST: 0,
     NORMAL: 1,
@@ -28,8 +33,8 @@ export const VisualizerTimes = [
     [600, 300, 300, 600],
 ];
 export const InformationFieldColors = {
-    DARKGREEN: "darkgreen",
-    DARKRED: "darkred",
+    OK: "var(--bg-info-ok)",
+    ERROR: "var(--bg-info-error)",
 };
 export const HEAP_ERRORS = {
     EMPTY: "HEAP IS EMPTY",
@@ -50,3 +55,4 @@ export function fontLoader() {
         document.body.style.fontWeight = '100';
     });
 }
+export function toggleTheme() { }

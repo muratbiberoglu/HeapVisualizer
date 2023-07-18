@@ -37,7 +37,7 @@ export class MainHandler {
                 yield this.run(f);
             }
             catch (e) {
-                this.informationField.setText(e, InformationFieldColors.DARKRED);
+                this.informationField.setText(e, InformationFieldColors.ERROR);
             }
         });
     }
@@ -85,26 +85,26 @@ export class MainHandler {
                 throw Error("Not a number!");
             yield this.heap.push(newValue);
             this.arrayField.setText(this.heap.getArrayString(), "none");
-            this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.DARKGREEN);
+            this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.OK);
         });
     }
     top() {
         return __awaiter(this, void 0, void 0, function* () {
             const topElement = this.heap.top();
-            this.informationField.setText(`Top element of the heap is ${topElement}`, InformationFieldColors.DARKGREEN);
+            this.informationField.setText(`Top element of the heap is ${topElement}`, InformationFieldColors.OK);
         });
     }
     pop() {
         return __awaiter(this, void 0, void 0, function* () {
             const poppedElement = this.heap.pop();
-            this.informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.DARKGREEN);
+            this.informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.OK);
             this.arrayField.setText(this.heap.getArrayString());
         });
     }
     size() {
         return __awaiter(this, void 0, void 0, function* () {
             const size = this.heap.size();
-            this.informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.DARKGREEN);
+            this.informationField.setText(`Size of the heap is ${size}`, InformationFieldColors.OK);
         });
     }
     changeVisualizerSpeed(faster = true) {
