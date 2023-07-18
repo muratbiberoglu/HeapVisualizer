@@ -9,7 +9,6 @@ export type handlerFunctionSignature = (() => Promise<void>) | (() => void);
 export class MainHandler {
     private heap: Heap;
     private heapHandler: HeapHandler;
-    private themeHandler: ThemeHandler;
 
     private arrayField: FieldElement;
     private speedField: FieldElement;
@@ -29,7 +28,7 @@ export class MainHandler {
 
         this.setupFunctionsAndKeys();
 
-        this.themeHandler = new ThemeHandler("toggleThemeButton");
+        new ThemeHandler("toggleThemeButton");
 
         this.debugField.setColor("red");    // indicates debugger is off
     }

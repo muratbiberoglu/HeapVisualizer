@@ -67,7 +67,7 @@ export class HeapHandler {
         this.isRunning = running;
     }
     getRunning() {
-        return this.isRunning;
+        return this.isRunning || (this.isInDebugMode && this.isDebuggerWaiting);
     }
     visualize(visualizeDTO) {
         return __awaiter(this, void 0, void 0, function* () {

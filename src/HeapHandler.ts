@@ -80,7 +80,7 @@ export class HeapHandler {
     }
 
     getRunning(): boolean {
-        return this.isRunning;
+        return this.isRunning || (this.isInDebugMode && this.isDebuggerWaiting);
     }
 
     async visualize(visualizeDTO: VisualizeDTO) {

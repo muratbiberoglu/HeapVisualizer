@@ -21,7 +21,7 @@ export class MainHandler {
         this.debugField = new FieldElement("debugField");
         this.informationField = new FieldElement("informationField");
         this.setupFunctionsAndKeys();
-        this.themeHandler = new ThemeHandler("toggleThemeButton");
+        new ThemeHandler("toggleThemeButton");
         this.debugField.setColor("red"); // indicates debugger is off
     }
     handleKeyDown(KEY) {
