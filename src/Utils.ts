@@ -3,6 +3,8 @@ export const HeapColors = [
     "var(--swap)",
     "var(--compare)",
     "var(--certain)",
+    "var(--delete)",
+    "var(--greater)",
 ]
 
 export const VisualizerSpeeds = {
@@ -17,14 +19,16 @@ export enum VisualizerSteps {
     SWAP,
     COMPARE,
     CERTAIN,
+    DELETE,
+    GREATER, // VISUALIZE GREATER THAN CHILD IN POP FUNCTION
 }
 
 export const VisualizerSpeedNames = ["FAST", "NORMAL", "SLOW"];
 
 export const VisualizerTimes = [
-    [200, 100, 100, 300],
-    [400, 200, 200, 600],
-    [600, 300, 300, 600],
+    [200, 100, 100, 300, 200, 100],
+    [400, 200, 200, 600, 400, 200],
+    [600, 300, 300, 600, 600, 300],
 ];
 
 export const InformationFieldColors = {

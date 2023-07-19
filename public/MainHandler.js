@@ -98,7 +98,7 @@ export class MainHandler {
     }
     pop() {
         return __awaiter(this, void 0, void 0, function* () {
-            const poppedElement = this.heap.pop();
+            const poppedElement = yield this.heap.pop();
             this.informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.OK);
             this.arrayField.setText(this.heap.getArrayString());
         });

@@ -12,6 +12,8 @@
     --swap-light: var(--bg-info-error-light);
     --compare-light: var(--bg-debug-light);
     --certain-light: var(--bg-info-ok-light);
+    --delete-light: var(--bg-info-error-light);
+    --greater-light: var(--certain-light);
 
     --text-dark: #fff;
     --bg-dark-1: #222;
@@ -24,6 +26,8 @@
     --swap-dark: var(--bg-info-error-dark);
     --compare-dark: var(--bg-debug-dark);
     --certain-dark: var(--bg-info-ok-dark);
+    --delete-dark: var(--bg-info-error-dark);
+    --greater-dark: var(--certain-dark);
 }
 
 @media(prefers-color-scheme: dark) {
@@ -39,6 +43,8 @@
         --swap: var(--swap-dark);
         --compare: var(--compare-dark);
         --certain: var(--certain-dark);
+        --delete: var(--delete-dark);
+        --greater: var(--greater-dark);
     }
 }
 
@@ -55,6 +61,8 @@
         --swap: var(--swap-light);
         --compare: var(--compare-light);
         --certain: var(--certain-light);
+        --delete: var(--delete-light);
+        --greater: var(--greater-light);
     }
 }
 
@@ -70,6 +78,8 @@
     --swap: var(--swap-dark);
     --compare: var(--compare-dark);
     --certain: var(--certain-dark);
+    --delete: var(--delete-dark);
+    --greater: var(--greater-dark);
 }
 
 [color-scheme="light"] {
@@ -84,6 +94,8 @@
     --swap: var(--swap-light);
     --compare: var(--compare-light);
     --certain: var(--certain-light);
+    --delete: var(--delete-light);
+    --greater: var(--greater-light);
 }
 
 body {
@@ -200,7 +212,7 @@ text {
 
 line {
     stroke: var(--text);
-    stroke-width: 1;
+    stroke-width: 0.5;
 }
 
 path {

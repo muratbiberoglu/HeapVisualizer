@@ -92,12 +92,37 @@ export class Heap {
         return this.heap[0];
     }
 
-    pop(): number {
+    async pop(): Promise<number> {
         if (this.cSize === 0)
             throw Error(HEAP_ERRORS.EMPTY);
 
         this.cSize--;
+
+        // not necessary for regular heap, it is for visualization
+        if (this.cSize === 0) {
+            // visualize delete
+            await this.heapElementHandler.visualize({
+                visualizeStep: VisualizerSteps.DELETE,
+                indexes: [this.cSize],
+                debugText: `Removing ${this.heap[this.cSize]} from heap`,
+            });
+            this.heapElementHandler.setVisibleById(this.cSize, false);
+            return this.heap[0];
+        }
+
+        // visualize swap
+        await this.heapElementHandler.visualize({
+            visualizeStep: VisualizerSteps.SWAP,
+            indexes: [this.cSize, 0],
+            debugText: `Swapping ${this.heap[0]} (top) with ${this.heap[this.cSize]} (last)`,
+        });
         this.swap(this.cSize, 0);
+        // visualize delete
+        await this.heapElementHandler.visualize({
+            visualizeStep: VisualizerSteps.DELETE,
+            indexes: [this.cSize],
+            debugText: `Removing ${this.heap[this.cSize]} (last) from heap`,
+        });
         this.heapElementHandler.setVisibleById(this.cSize, false);
 
         let cIndex = 0;
@@ -107,18 +132,60 @@ export class Heap {
             let index = cIndex;
 
             // compare with left child
-            if (lIndex < this.cSize && this.heap[index] < this.heap[lIndex]) {
-                index = lIndex;
+            if (lIndex < this.cSize) {
+                // visualize compare
+                await this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.COMPARE,
+                    indexes: [index, lIndex],
+                    debugText: `Comparing ${this.heap[index]} with ${this.heap[lIndex]}`,
+                });
+
+                if (this.heap[index] < this.heap[lIndex]) index = lIndex;
+
+                // visualize greater
+                await this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.GREATER,
+                    indexes: [index],
+                    debugText: `${this.heap[index]} is greater`,
+                });
             }
 
             // compare with right child
-            if (rIndex < this.cSize && this.heap[index] < this.heap[rIndex]) {
-                index = rIndex;
+            if (rIndex < this.cSize) {
+                // visualize compare
+                await this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.COMPARE,
+                    indexes: [index, rIndex],
+                    debugText: `Comparing ${this.heap[index]} with ${this.heap[rIndex]}`,
+                });
+
+                if (rIndex < this.cSize && this.heap[index] < this.heap[rIndex]) index = rIndex;
+
+                // visualize greater
+                await this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.GREATER,
+                    indexes: [index],
+                    debugText: `${this.heap[index]} is greater`,
+                });
             }
 
             // if current index has maximum value then break
-            if (index === cIndex) break;
+            if (index === cIndex) {
+                // visualize certain
+                await this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.CERTAIN,
+                    indexes: [index],
+                    debugText: `Since ${this.heap[index]} is not less than its childs its position is certain`,
+                });
+                break;
+            }
 
+            // visualize swap
+            await this.heapElementHandler.visualize({
+                visualizeStep: VisualizerSteps.SWAP,
+                indexes: [index, cIndex],
+                debugText: `Swapping ${this.heap[index]} with ${this.heap[cIndex]}`,
+            });
             this.swap(index, cIndex);
             cIndex = index;
         }

@@ -108,7 +108,7 @@ export class MainHandler {
     }
 
     private async pop(): Promise<void> {
-        const poppedElement = this.heap.pop();
+        const poppedElement = await this.heap.pop();
         this.informationField.setText(`${poppedElement} popped from the heap`, InformationFieldColors.OK);
         this.arrayField.setText(this.heap.getArrayString());
     }
