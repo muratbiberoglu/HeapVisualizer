@@ -13,9 +13,12 @@ export class MainHandler {
     private arrayField: FieldElement;
     private speedField: FieldElement;
     private debugField: FieldElement;
+    private heapTypeField: FieldElement;
     private informationField: FieldElement;
 
     private functions = new Map<string, handlerFunctionSignature>;
+
+    private copyButton: HTMLElement;
 
     constructor() {
         this.heap = new Heap();
@@ -24,6 +27,7 @@ export class MainHandler {
         this.arrayField = new FieldElement("array");
         this.speedField = new FieldElement("speedField");
         this.debugField = new FieldElement("debugField");
+        this.heapTypeField = new FieldElement("heapTypeField");
         this.informationField = new FieldElement("informationField");
 
         this.setupFunctionsAndKeys();
@@ -31,6 +35,10 @@ export class MainHandler {
         new ThemeHandler("toggleThemeButton");
 
         this.debugField.setColor("red");    // indicates debugger is off
+        this.heapTypeField.setColor("red"); // indicates heap type is max
+
+        this.copyButton = document.getElementById("copyButton") as HTMLElement;
+        this.copyButton.onclick = () => {this.handleCopy()};
     }
 
     async handleKeyDown(KEY: string) {
@@ -62,13 +70,23 @@ export class MainHandler {
         const constraintOnHeight = freeHeight < 0.4 * screenWidth;
 
         const svg = document.getElementById('svg') as HTMLElement;
-        svg.style.removeProperty("maxHeight");
-        svg.style.removeProperty("maxWidth");
+        svg.style.removeProperty("max-width");
+        svg.style.removeProperty("max-height");
 
         if (constraintOnHeight)
             svg.style.maxHeight = `${freeHeight}px`;
         else
             svg.style.maxWidth = `${screenWidth}px`;
+    }
+
+    private handleCopy() {
+        const running = this.heapHandler.getRunning();
+        if (running) {
+            this.informationField.setText("Can not copied because heap is running", InformationFieldColors.ERROR);
+            return;
+        }
+        navigator.clipboard.writeText(this.heap.getArrayString());
+        this.informationField.setText("Array is copied to clipboard", InformationFieldColors.OK);
     }
 
     private async run(f: handlerFunctionSignature) {
@@ -80,6 +98,29 @@ export class MainHandler {
         } finally {
             this.heapHandler.setRunning(false);
         }
+    }
+
+    private async buildFromArray(): Promise<void> {
+        if (this.heap.size() !== 0)
+            throw Error("Build from array function can be used when heap is empty");
+
+        const input = prompt("Enter the space separated numbers:");
+
+        const isEmpty = input === null || input === "";
+        if (isEmpty) return;
+
+        const array = input.split(' ').map(strNum => Number(strNum));
+        const notConverted = array.some(num => Number.isNaN(num));
+        if (notConverted)
+            throw Error("Given input can not parsed to number array");
+
+        const isLengthOk = array.length <= 31;
+        if (!isLengthOk)
+            throw Error("The length of the given numbers must not exceed 31");
+
+        await this.heap.buildFromArray(array);
+        this.arrayField.setText(this.heap.getArrayString());
+        this.informationField.setText(`Builded heap from given ${array.length} numbers`, InformationFieldColors.OK);
     }
 
     private async push(): Promise<void> {
@@ -98,7 +139,7 @@ export class MainHandler {
         if (Number.isNaN(newValue)) throw Error("Not a number!");
 
         await this.heap.push(newValue);
-        this.arrayField.setText(this.heap.getArrayString(), "none");
+        this.arrayField.setText(this.heap.getArrayString());
         this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.OK);
     }
 
@@ -141,7 +182,20 @@ export class MainHandler {
         this.debugField.setColor(color);
     }
 
+    private async toggleHeapType() {
+        const isMaxHeap = !this.heap.getIsMaxHeap();
+        const text = isMaxHeap ? "MAX" : "MIN";
+        const color = isMaxHeap ? "red" : "green";
+        this.heapTypeField.setText(text);
+        this.heapTypeField.setColor(color);
+        await this.heap.toggleIsMaxHeap();
+        this.informationField.setText(`Builded ${text.toLowerCase()} heap`, InformationFieldColors.OK);
+        this.arrayField.setText(this.heap.getArrayString());
+    }
+
     private setupFunctionsAndKeys() {
+        this.functions.set('b', async () => await this.buildFromArray());
+        this.functions.set('h', async () => await this.toggleHeapType());
         this.functions.set('a', async () => await this.push());
         this.functions.set('s', async () => await this.size());
         this.functions.set('t', async () => await this.top());

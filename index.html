@@ -24,10 +24,18 @@
         </div>
 
         <div class="informationBar flexContainerRow">
-            <div style="flex-grow: 1;">A => Push</div>
-            <div style="flex-grow: 1;">T => Top</div>
-            <div style="flex-grow: 1;">P => Pop</div>
-            <div style="flex-grow: 1;">S => Size</div>
+            <div class="flexContainerCol" style="flex-grow: 2;">
+                <div style="flex-grow: 1;">A => Push</div>
+                <div style="flex-grow: 1;">S => Size</div>
+            </div>
+            <div class="flexContainerCol" style="flex-grow: 2;">
+                <div style="flex-grow: 1;">P => Pop</div>
+                <div style="flex-grow: 1;">T => Top</div>
+            </div>
+            <div class="flexContainerCol" style="flex-grow: 2;">
+                <div style="flex-grow: 1;">H => Toggle Type - <span id="heapTypeField">MAX</span></div>
+                <div style="flex-grow: 1;">B => Build From Array&nbsp;</div>
+            </div>
             <div class="flexContainerCol" style="flex-grow: 2;">
                 <div>D => Debug: <span id="debugField">OFF</span></div>
                 <div>↑↓ Speed: <span id="speedField">NORMAL</span></div>
@@ -37,10 +45,15 @@
         <div id="debugInformationField" style="display: none;">DEBUGGER</div>
         <div class="heapInformationBar">
             <div>
-                HEAP ARRAY:
+            <button id="copyButton">
+                <svg viewBox="0 -960 960 960">
+                    <path style="stroke: var(--text);"
+                        d="M180-81q-24 0-42-18t-18-42v-603h60v603h474v60H180Zm120-120q-24 0-42-18t-18-42v-560q0-24 18-42t42-18h440q24 0 42 18t18 42v560q0 24-18 42t-42 18H300Zm0-60h440v-560H300v560Zm0 0v-560 560Z" />
+                </svg>
+            </button>
             </div>
-            <div style="flex-grow: 1;" id="array">
-            </div>
+            <div style="white-space: nowrap;">HEAP ARRAY:</div>
+            <div id="array">[]</div>
         </div>
     </div>
     <div id="svgWrapper">

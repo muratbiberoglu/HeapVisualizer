@@ -19,10 +19,14 @@ export class MainHandler {
         this.arrayField = new FieldElement("array");
         this.speedField = new FieldElement("speedField");
         this.debugField = new FieldElement("debugField");
+        this.heapTypeField = new FieldElement("heapTypeField");
         this.informationField = new FieldElement("informationField");
         this.setupFunctionsAndKeys();
         new ThemeHandler("toggleThemeButton");
         this.debugField.setColor("red"); // indicates debugger is off
+        this.heapTypeField.setColor("red"); // indicates heap type is max
+        this.copyButton = document.getElementById("copyButton");
+        this.copyButton.onclick = () => { this.handleCopy(); };
     }
     handleKeyDown(KEY) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -51,12 +55,21 @@ export class MainHandler {
         const freeHeight = screenHeight - nHeight - 10;
         const constraintOnHeight = freeHeight < 0.4 * screenWidth;
         const svg = document.getElementById('svg');
-        svg.style.removeProperty("maxHeight");
-        svg.style.removeProperty("maxWidth");
+        svg.style.removeProperty("max-width");
+        svg.style.removeProperty("max-height");
         if (constraintOnHeight)
             svg.style.maxHeight = `${freeHeight}px`;
         else
             svg.style.maxWidth = `${screenWidth}px`;
+    }
+    handleCopy() {
+        const running = this.heapHandler.getRunning();
+        if (running) {
+            this.informationField.setText("Can not copied because heap is running", InformationFieldColors.ERROR);
+            return;
+        }
+        navigator.clipboard.writeText(this.heap.getArrayString());
+        this.informationField.setText("Array is copied to clipboard", InformationFieldColors.OK);
     }
     run(f) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -70,6 +83,26 @@ export class MainHandler {
             finally {
                 this.heapHandler.setRunning(false);
             }
+        });
+    }
+    buildFromArray() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this.heap.size() !== 0)
+                throw Error("Build from array function can be used when heap is empty");
+            const input = prompt("Enter the space separated numbers:");
+            const isEmpty = input === null || input === "";
+            if (isEmpty)
+                return;
+            const array = input.split(' ').map(strNum => Number(strNum));
+            const notConverted = array.some(num => Number.isNaN(num));
+            if (notConverted)
+                throw Error("Given input can not parsed to number array");
+            const isLengthOk = array.length <= 31;
+            if (!isLengthOk)
+                throw Error("The length of the given numbers must not exceed 31");
+            yield this.heap.buildFromArray(array);
+            this.arrayField.setText(this.heap.getArrayString());
+            this.informationField.setText(`Builded heap from given ${array.length} numbers`, InformationFieldColors.OK);
         });
     }
     push() {
@@ -86,7 +119,7 @@ export class MainHandler {
             if (Number.isNaN(newValue))
                 throw Error("Not a number!");
             yield this.heap.push(newValue);
-            this.arrayField.setText(this.heap.getArrayString(), "none");
+            this.arrayField.setText(this.heap.getArrayString());
             this.informationField.setText(`${newValue} pushed to the heap`, InformationFieldColors.OK);
         });
     }
@@ -128,7 +161,21 @@ export class MainHandler {
         this.debugField.setText(text);
         this.debugField.setColor(color);
     }
+    toggleHeapType() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const isMaxHeap = !this.heap.getIsMaxHeap();
+            const text = isMaxHeap ? "MAX" : "MIN";
+            const color = isMaxHeap ? "red" : "green";
+            this.heapTypeField.setText(text);
+            this.heapTypeField.setColor(color);
+            yield this.heap.toggleIsMaxHeap();
+            this.informationField.setText(`Builded ${text.toLowerCase()} heap`, InformationFieldColors.OK);
+            this.arrayField.setText(this.heap.getArrayString());
+        });
+    }
     setupFunctionsAndKeys() {
+        this.functions.set('b', () => __awaiter(this, void 0, void 0, function* () { return yield this.buildFromArray(); }));
+        this.functions.set('h', () => __awaiter(this, void 0, void 0, function* () { return yield this.toggleHeapType(); }));
         this.functions.set('a', () => __awaiter(this, void 0, void 0, function* () { return yield this.push(); }));
         this.functions.set('s', () => __awaiter(this, void 0, void 0, function* () { return yield this.size(); }));
         this.functions.set('t', () => __awaiter(this, void 0, void 0, function* () { return yield this.top(); }));

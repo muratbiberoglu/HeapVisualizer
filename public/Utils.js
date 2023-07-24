@@ -13,7 +13,7 @@ export const HeapColors = [
     "var(--compare)",
     "var(--certain)",
     "var(--delete)",
-    "var(--greater)",
+    "var(--prior)",
 ];
 export const VisualizerSpeeds = {
     FAST: 0,
@@ -28,13 +28,14 @@ export var VisualizerSteps;
     VisualizerSteps[VisualizerSteps["COMPARE"] = 2] = "COMPARE";
     VisualizerSteps[VisualizerSteps["CERTAIN"] = 3] = "CERTAIN";
     VisualizerSteps[VisualizerSteps["DELETE"] = 4] = "DELETE";
-    VisualizerSteps[VisualizerSteps["GREATER"] = 5] = "GREATER";
+    VisualizerSteps[VisualizerSteps["PRIOR"] = 5] = "PRIOR";
+    VisualizerSteps[VisualizerSteps["PUSH_FAST"] = 6] = "PUSH_FAST";
 })(VisualizerSteps || (VisualizerSteps = {}));
 export const VisualizerSpeedNames = ["FAST", "NORMAL", "SLOW"];
 export const VisualizerTimes = [
-    [200, 100, 100, 300, 200, 100],
-    [400, 200, 200, 600, 400, 200],
-    [600, 300, 300, 600, 600, 300],
+    [200, 100, 100, 300, 200, 100, 50],
+    [400, 200, 200, 600, 400, 200, 100],
+    [600, 300, 300, 600, 600, 300, 150],
 ];
 export const InformationFieldColors = {
     OK: "var(--bg-info-ok)",

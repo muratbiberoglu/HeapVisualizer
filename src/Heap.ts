@@ -5,6 +5,7 @@ export class Heap {
     private static MAX_SIZE = 31;
     private cSize: number;
     private heap: number[];
+    private isMaxHeap: boolean = true;
 
     private heapElementHandler: HeapHandler;
 
@@ -14,12 +15,43 @@ export class Heap {
         this.heapElementHandler = new HeapHandler(Heap.MAX_SIZE, Heap.getParent);
     }
 
+    getIsMaxHeap(): boolean {
+        return this.isMaxHeap;
+    }
+
+    async toggleIsMaxHeap(): Promise<void> {
+        this.isMaxHeap = !this.isMaxHeap;
+
+        for (let index = Math.floor(this.cSize / 2) - 1; index >= 0; index--)
+            await this.heapify(index);
+    }
+
     size(): number {
         return this.cSize;
     }
 
     getHeapElementHandler(): HeapHandler {
         return this.heapElementHandler;
+    }
+
+    async buildFromArray(array: number[]): Promise<void> {
+        this.cSize = array.length;
+        for (let index = 0; index < array.length; index++) {
+            const newValue = array[index];
+            this.heap[index] = newValue;
+            this.heapElementHandler.setValue(index, newValue);
+            this.heapElementHandler.setVisibleById(index);
+
+            // visualize push
+            await this.heapElementHandler.visualize({
+                visualizeStep: VisualizerSteps.PUSH_FAST,
+                indexes: [index],
+                debugText: `${newValue} pushed end of the heap array`,
+            });
+        };
+
+        for (let index = Math.floor(this.cSize / 2) - 1; index >= 0; index--)
+            await this.heapify(index);
     }
 
     async push(newValue: number): Promise<void> {
@@ -54,14 +86,14 @@ export class Heap {
                 indexes: [cIndex, pIndex],
                 debugText: `Comparing ${newValue} (child) with ${pValue} (parent)`,
             });
-            
-            // if parent is greater than or equal then break
-            if (newValue <= this.heap[pIndex]) {
+
+            // if parent is prior or equal then break
+            if (this.isPriorThanOrEqual(pIndex, cIndex)) {
                 // visualize certain
                 await this.heapElementHandler.visualize({
                     visualizeStep: VisualizerSteps.CERTAIN,
                     indexes: [cIndex],
-                    debugText: `Since ${newValue} (child) is not greater than ${pValue} (parent) its position is certain`,
+                    debugText: `Since ${newValue} (child) is not than more prior than ${pValue} (parent) its position is certain`,
                 });
                 return;
             }
@@ -125,7 +157,12 @@ export class Heap {
         });
         this.heapElementHandler.setVisibleById(this.cSize, false);
 
-        let cIndex = 0;
+        // heapify
+        await this.heapify(0);
+        return this.heap[this.cSize];
+    }
+
+    private async heapify(cIndex: number): Promise<void> {
         while (true) {
             const lIndex = Heap.getLeft(cIndex);
             const rIndex = Heap.getRight(cIndex);
@@ -140,13 +177,13 @@ export class Heap {
                     debugText: `Comparing ${this.heap[index]} with ${this.heap[lIndex]}`,
                 });
 
-                if (this.heap[index] < this.heap[lIndex]) index = lIndex;
+                if (this.isPriorThan(lIndex, index)) index = lIndex;
 
-                // visualize greater
+                // visualize prior
                 await this.heapElementHandler.visualize({
-                    visualizeStep: VisualizerSteps.GREATER,
+                    visualizeStep: VisualizerSteps.PRIOR,
                     indexes: [index],
-                    debugText: `${this.heap[index]} is greater`,
+                    debugText: `${this.heap[index]} is more prior`,
                 });
             }
 
@@ -159,13 +196,13 @@ export class Heap {
                     debugText: `Comparing ${this.heap[index]} with ${this.heap[rIndex]}`,
                 });
 
-                if (rIndex < this.cSize && this.heap[index] < this.heap[rIndex]) index = rIndex;
+                if (this.isPriorThan(rIndex, index)) index = rIndex;
 
-                // visualize greater
+                // visualize prior
                 await this.heapElementHandler.visualize({
-                    visualizeStep: VisualizerSteps.GREATER,
+                    visualizeStep: VisualizerSteps.PRIOR,
                     indexes: [index],
-                    debugText: `${this.heap[index]} is greater`,
+                    debugText: `${this.heap[index]} is more prior`,
                 });
             }
 
@@ -175,7 +212,7 @@ export class Heap {
                 await this.heapElementHandler.visualize({
                     visualizeStep: VisualizerSteps.CERTAIN,
                     indexes: [index],
-                    debugText: `Since ${this.heap[index]} is not less than its childs its position is certain`,
+                    debugText: `Since priority of ${this.heap[index]} is more than or equal to its childs its position is certain`,
                 });
                 break;
             }
@@ -189,12 +226,24 @@ export class Heap {
             this.swap(index, cIndex);
             cIndex = index;
         }
-
-        return this.heap[this.cSize];
     }
 
     getArrayString(): string {
-        return this.heap.slice(0, this.cSize).join(", ");
+        return `[${this.heap.slice(0, this.cSize).join(", ")}]`;
+    }
+
+    private isPriorThan(i: number, j: number): boolean {
+        if (this.isMaxHeap)
+            return this.heap[i] > this.heap[j];
+        else
+            return this.heap[i] < this.heap[j];
+    }
+
+    private isPriorThanOrEqual(i: number, j: number): boolean {
+        if (this.isMaxHeap)
+            return this.heap[i] >= this.heap[j];
+        else
+            return this.heap[i] <= this.heap[j];
     }
 
     private swap(i: number, j: number) {

@@ -4,7 +4,7 @@ export const HeapColors = [
     "var(--compare)",
     "var(--certain)",
     "var(--delete)",
-    "var(--greater)",
+    "var(--prior)",
 ]
 
 export const VisualizerSpeeds = {
@@ -20,15 +20,16 @@ export enum VisualizerSteps {
     COMPARE,
     CERTAIN,
     DELETE,
-    GREATER, // VISUALIZE GREATER THAN CHILD IN POP FUNCTION
+    PRIOR,      // VISUALIZE PRIOR THAN CHILD IN POP FUNCTION
+    PUSH_FAST,  // USE SERIAL PUSH WJEN BUILDING HEAP FROM ARRAY
 }
 
 export const VisualizerSpeedNames = ["FAST", "NORMAL", "SLOW"];
 
 export const VisualizerTimes = [
-    [200, 100, 100, 300, 200, 100],
-    [400, 200, 200, 600, 400, 200],
-    [600, 300, 300, 600, 600, 300],
+    [200, 100, 100, 300, 200, 100, 50],
+    [400, 200, 200, 600, 400, 200, 100],
+    [600, 300, 300, 600, 600, 300, 150],
 ];
 
 export const InformationFieldColors = {

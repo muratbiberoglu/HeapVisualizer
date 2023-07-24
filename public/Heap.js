@@ -11,15 +11,46 @@ import { HeapHandler } from "./HeapHandler.js";
 import { HEAP_ERRORS, VisualizerSteps } from "./Utils.js";
 export class Heap {
     constructor() {
+        this.isMaxHeap = true;
         this.cSize = 0;
         this.heap = new Array(Heap.MAX_SIZE);
         this.heapElementHandler = new HeapHandler(Heap.MAX_SIZE, Heap.getParent);
+    }
+    getIsMaxHeap() {
+        return this.isMaxHeap;
+    }
+    toggleIsMaxHeap() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.isMaxHeap = !this.isMaxHeap;
+            for (let index = Math.floor(this.cSize / 2) - 1; index >= 0; index--)
+                yield this.heapify(index);
+        });
     }
     size() {
         return this.cSize;
     }
     getHeapElementHandler() {
         return this.heapElementHandler;
+    }
+    buildFromArray(array) {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.cSize = array.length;
+            for (let index = 0; index < array.length; index++) {
+                const newValue = array[index];
+                this.heap[index] = newValue;
+                this.heapElementHandler.setValue(index, newValue);
+                this.heapElementHandler.setVisibleById(index);
+                // visualize push
+                yield this.heapElementHandler.visualize({
+                    visualizeStep: VisualizerSteps.PUSH_FAST,
+                    indexes: [index],
+                    debugText: `${newValue} pushed end of the heap array`,
+                });
+            }
+            ;
+            for (let index = Math.floor(this.cSize / 2) - 1; index >= 0; index--)
+                yield this.heapify(index);
+        });
     }
     push(newValue) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -49,13 +80,13 @@ export class Heap {
                     indexes: [cIndex, pIndex],
                     debugText: `Comparing ${newValue} (child) with ${pValue} (parent)`,
                 });
-                // if parent is greater than or equal then break
-                if (newValue <= this.heap[pIndex]) {
+                // if parent is prior or equal then break
+                if (this.isPriorThanOrEqual(pIndex, cIndex)) {
                     // visualize certain
                     yield this.heapElementHandler.visualize({
                         visualizeStep: VisualizerSteps.CERTAIN,
                         indexes: [cIndex],
-                        debugText: `Since ${newValue} (child) is not greater than ${pValue} (parent) its position is certain`,
+                        debugText: `Since ${newValue} (child) is not than more prior than ${pValue} (parent) its position is certain`,
                     });
                     return;
                 }
@@ -111,7 +142,13 @@ export class Heap {
                 debugText: `Removing ${this.heap[this.cSize]} (last) from heap`,
             });
             this.heapElementHandler.setVisibleById(this.cSize, false);
-            let cIndex = 0;
+            // heapify
+            yield this.heapify(0);
+            return this.heap[this.cSize];
+        });
+    }
+    heapify(cIndex) {
+        return __awaiter(this, void 0, void 0, function* () {
             while (true) {
                 const lIndex = Heap.getLeft(cIndex);
                 const rIndex = Heap.getRight(cIndex);
@@ -124,13 +161,13 @@ export class Heap {
                         indexes: [index, lIndex],
                         debugText: `Comparing ${this.heap[index]} with ${this.heap[lIndex]}`,
                     });
-                    if (this.heap[index] < this.heap[lIndex])
+                    if (this.isPriorThan(lIndex, index))
                         index = lIndex;
-                    // visualize greater
+                    // visualize prior
                     yield this.heapElementHandler.visualize({
-                        visualizeStep: VisualizerSteps.GREATER,
+                        visualizeStep: VisualizerSteps.PRIOR,
                         indexes: [index],
-                        debugText: `${this.heap[index]} is greater`,
+                        debugText: `${this.heap[index]} is more prior`,
                     });
                 }
                 // compare with right child
@@ -141,13 +178,13 @@ export class Heap {
                         indexes: [index, rIndex],
                         debugText: `Comparing ${this.heap[index]} with ${this.heap[rIndex]}`,
                     });
-                    if (rIndex < this.cSize && this.heap[index] < this.heap[rIndex])
+                    if (this.isPriorThan(rIndex, index))
                         index = rIndex;
-                    // visualize greater
+                    // visualize prior
                     yield this.heapElementHandler.visualize({
-                        visualizeStep: VisualizerSteps.GREATER,
+                        visualizeStep: VisualizerSteps.PRIOR,
                         indexes: [index],
-                        debugText: `${this.heap[index]} is greater`,
+                        debugText: `${this.heap[index]} is more prior`,
                     });
                 }
                 // if current index has maximum value then break
@@ -156,7 +193,7 @@ export class Heap {
                     yield this.heapElementHandler.visualize({
                         visualizeStep: VisualizerSteps.CERTAIN,
                         indexes: [index],
-                        debugText: `Since ${this.heap[index]} is not less than its childs its position is certain`,
+                        debugText: `Since priority of ${this.heap[index]} is more than or equal to its childs its position is certain`,
                     });
                     break;
                 }
@@ -169,11 +206,22 @@ export class Heap {
                 this.swap(index, cIndex);
                 cIndex = index;
             }
-            return this.heap[this.cSize];
         });
     }
     getArrayString() {
-        return this.heap.slice(0, this.cSize).join(", ");
+        return `[${this.heap.slice(0, this.cSize).join(", ")}]`;
+    }
+    isPriorThan(i, j) {
+        if (this.isMaxHeap)
+            return this.heap[i] > this.heap[j];
+        else
+            return this.heap[i] < this.heap[j];
+    }
+    isPriorThanOrEqual(i, j) {
+        if (this.isMaxHeap)
+            return this.heap[i] >= this.heap[j];
+        else
+            return this.heap[i] <= this.heap[j];
     }
     swap(i, j) {
         const inRange = 0 <= i && i < Heap.MAX_SIZE && 0 <= j && j < Heap.MAX_SIZE;

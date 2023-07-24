@@ -1,6 +1,4 @@
 :root {
-    --navbarBackgroundColor: #000;
-
     --text-light: #000;
     --bg-light-1: #fff;
     --bg-light-2: #ddd;
@@ -13,7 +11,7 @@
     --compare-light: var(--bg-debug-light);
     --certain-light: var(--bg-info-ok-light);
     --delete-light: var(--bg-info-error-light);
-    --greater-light: var(--certain-light);
+    --prior-light: var(--certain-light);
 
     --text-dark: #fff;
     --bg-dark-1: #222;
@@ -27,7 +25,7 @@
     --compare-dark: var(--bg-debug-dark);
     --certain-dark: var(--bg-info-ok-dark);
     --delete-dark: var(--bg-info-error-dark);
-    --greater-dark: var(--certain-dark);
+    --prior-dark: var(--certain-dark);
 }
 
 @media(prefers-color-scheme: dark) {
@@ -44,7 +42,7 @@
         --compare: var(--compare-dark);
         --certain: var(--certain-dark);
         --delete: var(--delete-dark);
-        --greater: var(--greater-dark);
+        --prior: var(--prior-dark);
     }
 }
 
@@ -62,7 +60,7 @@
         --compare: var(--compare-light);
         --certain: var(--certain-light);
         --delete: var(--delete-light);
-        --greater: var(--greater-light);
+        --prior: var(--prior-light);
     }
 }
 
@@ -79,7 +77,7 @@
     --compare: var(--compare-dark);
     --certain: var(--certain-dark);
     --delete: var(--delete-dark);
-    --greater: var(--greater-dark);
+    --prior: var(--prior-dark);
 }
 
 [color-scheme="light"] {
@@ -95,7 +93,7 @@
     --compare: var(--compare-light);
     --certain: var(--certain-light);
     --delete: var(--delete-light);
-    --greater: var(--greater-light);
+    --prior: var(--prior-light);
 }
 
 body {
@@ -112,7 +110,11 @@ body {
     background-color: var(--bg-2);
     color: var(--text);
     text-align: center;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+}
+
+.informationBar div {
+    margin: 0 1rem 0 1rem;
 }
 
 .flexContainerRow {
@@ -164,10 +166,10 @@ body {
 
 .heapInformationBar {
     display: flex;
-    flex-wrap: wrap;
+    /* flex-wrap: wrap; */
     align-content: center;
 
-    align-items: stretch;
+    align-items: center;
 
     padding: 0.5rem;
     text-align: center;
@@ -222,4 +224,23 @@ path {
 
 #svgWrapper {
     text-align: center;
+}
+
+#array {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: normal;
+    font-size: 1.25rem;
+}
+
+#copyButton {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--bg-1);
+    border: 0px solid var(--text);
+    color: var(--text);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
 }
