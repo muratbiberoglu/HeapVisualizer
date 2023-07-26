@@ -160,6 +160,8 @@ export class MainHandler {
         const color = isOn ? "green" : "red";
         this.debugField.setText(text);
         this.debugField.setColor(color);
+        if (isOn)
+            alert(`Press "Enter" to continue to execution of algorithm at each step.`);
     }
     toggleHeapType() {
         return __awaiter(this, void 0, void 0, function* () {
